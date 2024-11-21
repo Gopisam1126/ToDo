@@ -3,7 +3,7 @@ import pkg from "pg";
 import dotenv from "dotenv";
 import cors from "cors";
 import bcrypt from "bcrypt";
-import { jwt } from "jsonwebtoken";
+import jwt  from "jsonwebtoken";
 
 const app = express();
 const port = 3000;
@@ -52,7 +52,7 @@ app.post("/login", async (req, res) => {
         const token = jwt.sign({username}, SECRET_KEY, {expiresIn: "1h"});
 
         res.status(200).json({message: "Login Successful", token, username});
-        
+
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: "Server error" });
