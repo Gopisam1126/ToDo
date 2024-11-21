@@ -118,3 +118,40 @@
     left: -4.5rem;
     cursor: pointer;
 }
+.sep-hr {
+    margin-top: 2rem;
+    opacity: 0.5;
+}
+.login-with-c {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(-1.5rem);
+    gap: 2rem;
+    padding-top: 2rem;
+}
+.google-l, .fb-l {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    cursor: pointer;
+}
+.login-w-i {
+    width: 2rem;
+    height: 2rem;
+}
+.create-acc-c {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(-1.5rem);
+    gap: 1.2rem;
+    padding-top: 2rem;
+    font-size: var(--font-s-sm);
+}
+.l-signup {
+    text-decoration: none;
+}
+.l-signup:hover {
+    text-decoration: underline;
+}

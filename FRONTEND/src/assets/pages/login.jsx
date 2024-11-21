@@ -48,6 +48,23 @@ function Login() {
                         <input type="submit" value="Login" className="login-btn" />
                         <a href="#" className="fgt-pass">Forgot Password</a>
                     </div>
+                    <hr className="sep-hr" />
+                    <div className="login-with-c">
+                        <div className="google-l">
+                            <img src="\images\search.png" alt="google-login-icon" className="google-login-icon login-w-i" />
+                            <p className="google-login-t">Google</p>
+                        </div>
+                        <div className="fb-l">
+                            <img src="\images\facebook.png" alt="fb-icon" className="fb-login-icon login-w-i" />
+                            <p className="fb-login-t">Facebook</p>
+                        </div>
+                    </div>
+                    <div className="create-acc-c">
+                        <p className="create-acc-desc">
+                            Dont Have an Account ?
+                        </p>
+                        <a href="$" className="l-signup">Sign Up</a>
+                    </div>
                 </form>
             </div>
         </section>
