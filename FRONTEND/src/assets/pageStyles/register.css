@@ -1,0 +1,72 @@
+:root {
+
+    /* color pallet - 1 */
+
+    --primary-c: #17153B;
+    --primary-c2: #2E236C;
+    --sec-low-c: #433D8B;
+    --secondary-c: #C8ACD6;
+
+    /* color pallet - 2 */
+
+    --cp2-primary: #222831;
+    --cp2-primary2: #393E46;
+    --cp2-secondary: #00ADB5;
+    --cp2-t: #EEEEEE;
+
+    /* font families */
+
+    --font-fam-p: "Poppins", serif;
+    --font-fam-sec: "Raleway", sans-serif;
+    --font-fam-Itim: "Itim", serif;
+
+    /* font sizes */
+
+    --font-s-h1: 3.5rem;
+    --font-s-h2: 3rem;
+    --font-s-p: 2rem;
+    --font-s-desc: 1.7rem;
+    --font-s-span: 1.3rem;
+    --font-s-sm: 0.8rem;
+    
+}
+.r-form-card {
+    position: relative;
+    z-index: 2;
+    background: var(--cp2-primary);
+    color: #fff;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    width: 50rem;
+}
+.f-l-name-c {
+    display: flex;
+}
+.firstname-i-c, .lastname-i-c {
+    display: flex;
+    gap: 1.1rem;
+    width: 20.5rem;
+}
+.firstname-i {
+    margin-bottom: 0.6rem;
+}
+.signup-head {
+    font-size: var(--font-s-h2);
+    padding-bottom: 2rem;
+}
+.set-pass-i, .confirm-pass-i, .username-i {
+    width: 38.5rem;
+}
+.set-pass-i {
+    margin-bottom: 1.1rem;
+}
+.login-i {
+    font-size: var(--font-s-sm);
+}
+.visibility-icon {
+    position: relative;
+    top: 1.1rem;
+    left: -4.5rem;
+    cursor: pointer;
+}

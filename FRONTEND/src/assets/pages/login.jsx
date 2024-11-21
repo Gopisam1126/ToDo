@@ -3,7 +3,7 @@ import BadgeIcon from '@mui/icons-material/Badge';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 function Login() {
 
@@ -30,15 +30,15 @@ function Login() {
             const response = await axios.post("http://localhost:3000/login", data, {
                 'Content-Type': 'application/json',
             });
-            console.log(response);
-            if (response.status === 200) {
-                navigate(response.data.redirectUrl);
+            if (response.data.token) {
+                localStorage.setItem("token", response.data.token);
+                navigate(`/home/${formData.username}`);
             }
+            console.log(response);
         } catch (error) {
             console.log(error);
             alert(error.response?.data || "An error occurred")
         }
-
     }
 
     function toggleVisibility() {
@@ -89,7 +89,7 @@ function Login() {
                         <p className="create-acc-desc">
                             Dont Have an Account ?
                         </p>
-                        <a href="$" className="l-signup">Sign Up</a>
+                        <Link to={"/register"} className="l-signup">Sign Up</Link>
                     </div>
                 </form>
             </div>
