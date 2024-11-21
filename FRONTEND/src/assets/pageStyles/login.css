@@ -1,0 +1,120 @@
+:root {
+
+    /* color pallet - 1 */
+
+    --primary-c: #17153B;
+    --primary-c2: #2E236C;
+    --sec-low-c: #433D8B;
+    --secondary-c: #C8ACD6;
+
+    /* color pallet - 2 */
+
+    --cp2-primary: #222831;
+    --cp2-primary2: #393E46;
+    --cp2-secondary: #00ADB5;
+    --cp2-t: #EEEEEE;
+
+    /* font families */
+
+    --font-fam-p: "Poppins", serif;
+    --font-fam-sec: "Raleway", sans-serif;
+    --font-fam-Itim: "Itim", serif;
+
+    /* font sizes */
+
+    --font-s-h1: 3.5rem;
+    --font-s-h2: 3rem;
+    --font-s-p: 2rem;
+    --font-s-desc: 1.7rem;
+    --font-s-span: 1.3rem;
+    --font-s-sm: 0.8rem;
+    
+}
+
+.login-main-sec {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    height: 100vh;
+    background: url("/images/login_bg.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: var(--font-fam-p);
+}
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.6));
+    z-index: 1;
+}
+.form-card {
+    position: relative;
+    z-index: 2;
+    background: var(--cp2-primary);
+    color: #fff;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    width: 30rem;
+}
+.login-head {
+    font-size: var(--font-s-h2);
+    padding-bottom: 2rem;
+}
+
+/* form */
+
+.input-c label {
+    margin-bottom: 2rem;
+}
+.username-i-c, .pass-i-c {
+    display: flex;
+    gap: 2rem;
+}
+.login-i {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #3c3c50;
+    border-radius: 0.5rem;
+    background: #2c2c3d;
+    color: #fff;
+    margin-top: 0.6rem;
+    font-size: var(--font-s-span);
+}
+.username-i {
+    margin-bottom: 0.6rem;
+}
+.login-btn {
+    border: 1px solid transparent;
+    background: var(--cp2-secondary);
+    padding: 0.5rem;
+    width: 10rem;
+    border-radius: 1rem;
+    margin-top: 2rem;
+    cursor: pointer;
+    font-size: var(--font-s-span);
+    transition: all 0.3s ease-in-out;
+    color: var(--cp2-primary);
+}
+.login-btn:hover {
+    background-color: #018a91;
+}
+.fgt-pass {
+    margin-left: 2rem;
+    text-decoration: none;
+}
+.fgt-pass:hover {
+    text-decoration: underline;
+}
+.visibility-icon {
+    position: relative;
+    top: 1.5rem;
+    left: -4.5rem;
+    cursor: pointer;
+}
