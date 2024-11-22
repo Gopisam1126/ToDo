@@ -11,7 +11,7 @@ function Login() {
 
     const [formData, setFormData] = useState({
         username: "",
-        password: ""
+        pass: ""
     })
     const [isVisible, setIsVisible] = useState(false);
 
@@ -21,6 +21,7 @@ function Login() {
     
     async function handleSubmit(e) {
         e.preventDefault();
+
         const data = new FormData();
         Object.keys(formData).forEach((key) => {
             data.append(key, formData[key])
@@ -28,16 +29,17 @@ function Login() {
 
         try {
             const response = await axios.post("http://localhost:3000/login", data, {
-                'Content-Type': 'application/json',
+                headers: {
+                    "Content-Type": "application/json",
+                },
             });
+            
             if (response.data.token) {
                 localStorage.setItem("token", response.data.token);
                 navigate(`/home/${formData.username}`);
             }
-            console.log(response);
         } catch (error) {
-            console.log(error);
-            alert(error.response?.data || "An error occurred")
+            alert("An Error Occured PLease try again Later or Check credentials", error)
         }
     }
 
@@ -54,7 +56,7 @@ function Login() {
                     <div className="input-c">
                         <label htmlFor="username" className="user-n-l login-labels">Username</label><br />
                         <div className="username-i-c">
-                            <input type="text" name="username" placeholder="eg: John_Doe" className="username-i login-i" autoComplete="off" required onChange={handleInputChange} /><BadgeIcon style={{
+                            <input type="text" name="username" placeholder="eg: John_Doe123" className="username-i login-i" autoComplete="off" required onChange={handleInputChange} /><BadgeIcon style={{
                                 position: "relative",
                                 top: "1.5rem",
                                 left: "-4.5rem"
