@@ -33,6 +33,24 @@ app.use(express.urlencoded({ extended: true }));
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
+app.get("/getuser", async (req, res) => {
+    const token = req.headers.authorization?.split(" ")[1]; // Get the token from the Authorization header
+    
+    if (!token) {
+        return res.status(401).json({ error: "No token provided" });
+    }
+
+    try {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const username = decoded.username;
+        res.status(200).json({ username });
+    } catch (error) {
+        console.error("Error verifying token:", error);
+        res.status(401).json({ error: "Invalid token" });
+    }
+});
+
+
 app.post("/register", async (req, res) => {
     const {firstname, lastname, setusername, setpass} = req.body;
 
@@ -78,18 +96,13 @@ app.post("/register", async (req, res) => {
 })
 
 app.post("/login", async (req, res) => {
-    console.log("req.body : ", req.body);
+    // console.log("req.body : ", req.body);
     const {username, pass} = req.body;
 
-    console.log("username : ", username);
-    
-    console.log("pass : ", pass);
-    
 
     try {
         const user = await pg.query("SELECT username, password FROM users WHERE username = $1", [username]);
 
-        console.log("user : ", user);
         
 
         if (user.rows.length === 0) {
