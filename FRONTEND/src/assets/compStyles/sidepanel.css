@@ -36,8 +36,8 @@
     background: var(--cp2-primary);
     padding: 1.2rem 1.5rem;
     /* width: 18rem; */
+    height: 100vh;
     transition: width 0.3s ease-in-out;
-    overflow: hidden;
 }
 
 .sp-main-body {

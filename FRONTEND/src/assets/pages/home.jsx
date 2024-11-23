@@ -8,8 +8,10 @@ function Home() {
     
     return <>
         <section className="home-main-sec">
-            <Sidepanel/>
-            <div className="home-main-body">
+            <div className="left-main-sec">
+                <Sidepanel/>
+            </div>
+            <div className="home-main-body right-main-sec">
                 <Header/>
                 <CreateArea/>
                 <Footer/>

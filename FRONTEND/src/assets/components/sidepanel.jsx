@@ -100,26 +100,26 @@ function Sidepanel() {
                                 <ul>
                                     <li className="tsk-exp-li">
                                         Task 1
-                                        <span className={`status ${isActiveTask ? "green" : "orange"}`}>
-                                            {isActiveTask ? "Active" : "Pending"}
+                                        <span className={`status ${isActiveTask ? "orange" : "green"}`}>
+                                            {isActiveTask ? "(Pending)" : "(Completed)"}
                                         </span>
                                     </li>
                                     <li className="tsk-exp-li">
                                         Task 2
-                                        <span className={`status ${isActiveTask ? "green" : "orange"}`}>
-                                            {isActiveTask ? "Active" : "Pending"}
+                                        <span className={`status ${isActiveTask ? "orange" : "green"}`}>
+                                            {isActiveTask ? "(Pending)" : "(Completed)"}
                                         </span>
                                     </li>
                                     <li className="tsk-exp-li">
                                         Task 3
-                                        <span className={`status ${isActiveTask ? "green" : "orange"}`}>
-                                            {isActiveTask ? "Active" : "Pending"}
+                                        <span className={`status ${isActiveTask ? "orange" : "green"}`}>
+                                            {isActiveTask ? "(Pending)" : "(Completed)"}
                                         </span>
                                     </li>
                                     <li className="tsk-exp-li">
                                         Task 4
-                                        <span className={`status ${isActiveTask ? "green" : "orange"}`}>
-                                            {isActiveTask ? "Active" : "Pending"}
+                                        <span className={`status ${isActiveTask ? "orange" : "green"}`}>
+                                            {isActiveTask ? "(Pending)" : "(Completed)"}
                                         </span>
                                     </li>
                                 </ul>

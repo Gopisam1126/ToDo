@@ -39,3 +39,17 @@
     color: var(--cp2-t);
     font-family: var(--font-fam-p);
 }
+.left-main-sec::-webkit-scrollbar, 
+.right-main-sec::-webkit-scrollbar {
+    display: none;
+}
+.left-main-sec, 
+.right-main-sec {
+    scrollbar-width: none; /* For Firefox */
+}
+.left-main-sec {
+    overflow-y: auto;
+}
+.right-main-sec {
+    overflow-y: auto;
+}
