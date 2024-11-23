@@ -1,0 +1,41 @@
+:root {
+
+    /* color pallet - 1 */
+
+    --primary-c: #17153B;
+    --primary-c2: #2E236C;
+    --sec-low-c: #433D8B;
+    --secondary-c: #C8ACD6;
+
+    /* color pallet - 2 */
+
+    --cp2-primary: #222831;
+    --cp2-primary2: #393E46;
+    --cp2-secondary: #00ADB5;
+    --cp2-t: #EEEEEE;
+
+    /* font families */
+
+    --font-fam-p: "Poppins", serif;
+    --font-fam-sec: "Raleway", sans-serif;
+    --font-fam-Itim: "Itim", serif;
+
+    /* font sizes */
+
+    --font-s-h1: 3.5rem;
+    --font-s-h2: 3rem;
+    --font-s-p: 2rem;
+    --font-s-desc: 1.7rem;
+    --font-s-span: 1.3rem;
+    --font-s-sm: 0.8rem;
+    
+}
+
+.home-main-sec {
+    display: flex;
+    gap: 1.2rem;
+    height: 100vh;
+    background: var(--cp2-primary2);
+    color: var(--cp2-t);
+    font-family: var(--font-fam-p);
+}

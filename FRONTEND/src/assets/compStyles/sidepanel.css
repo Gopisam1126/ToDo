@@ -1,0 +1,102 @@
+:root {
+
+    /* color pallet - 1 */
+
+    --primary-c: #17153B;
+    --primary-c2: #2E236C;
+    --sec-low-c: #433D8B;
+    --secondary-c: #C8ACD6;
+
+    /* color pallet - 2 */
+
+    --cp2-primary: #222831;
+    --cp2-primary2: #393E46;
+    --cp2-secondary: #00ADB5;
+    --cp2-t: #EEEEEE;
+
+    /* font families */
+
+    --font-fam-p: "Poppins", serif;
+    --font-fam-sec: "Raleway", sans-serif;
+    --font-fam-Itim: "Itim", serif;
+
+    /* font sizes */
+
+    --font-s-h1: 3.5rem;
+    --font-s-h2: 3rem;
+    --font-s-l: 2.5rem;
+    --font-s-p: 2rem;
+    --font-s-desc: 1.7rem;
+    --font-s-span: 1.3rem;
+    --font-s-sm: 0.8rem;
+    
+}
+
+.sp-main-sec {
+    background: var(--cp2-primary);
+    padding: 1.2rem 1.5rem;
+    /* width: 18rem; */
+    transition: width 0.3s ease-in-out;
+    overflow: hidden;
+}
+
+.sp-main-body {
+    margin-top: 2rem;
+}
+.open {
+    width: 18rem;
+}
+.close {
+    width: 4rem;
+    padding-left: 0.5rem;
+}
+.hide {
+    display: none;
+}
+.display {
+    display: flex;
+    flex-direction: column;
+}
+.sp-main-head {
+    display: flex;
+    align-items: center;
+    font-size: var(--font-s-desc);
+}
+.close-i {
+    position: relative;
+    margin-left: auto;
+    cursor: pointer;
+    transform: translateY(0.4rem);
+}
+.gm-head-c, .tsk-head-c {
+    display: flex;
+    align-items: center;
+}
+.expand-i {
+    transform: translateY(0.2rem);
+    margin-left: 0.8rem;
+    cursor: pointer;
+}
+.add-new-group-c {
+    cursor: pointer;
+}
+.tasks-main {
+    margin-top: 1.5rem;
+}
+.gm-exp-li, .tsk-exp-li {
+    list-style: none;
+    padding-left: 0.8rem;
+    /* line-height: 2.5; */
+    margin-top: 1.2rem;
+    cursor: pointer;
+}
+.status {
+    position: relative;
+    left: 0.8rem;
+}
+.green {
+    color: green;
+}
+.orange {
+    color: orange;
+}

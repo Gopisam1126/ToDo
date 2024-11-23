@@ -1,6 +1,6 @@
 function Header() {
     return <>
-        <section>
+        <section className="header-main-sec">
             <h1>Header</h1>
         </section>
     </>

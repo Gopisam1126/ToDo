@@ -1,14 +1,19 @@
 import Header from "../components/header";
 import CreateArea from "../components/createArea";
 import Footer from "../components/footer";
+import Sidepanel from "../components/sidepanel";
+import "../pageStyles/home.css";
 
 function Home() {
     
     return <>
-        <section>
-            <Header/>
-            <CreateArea/>
-            <Footer/>
+        <section className="home-main-sec">
+            <Sidepanel/>
+            <div className="home-main-body">
+                <Header/>
+                <CreateArea/>
+                <Footer/>
+            </div>
         </section>
     </>
 }
