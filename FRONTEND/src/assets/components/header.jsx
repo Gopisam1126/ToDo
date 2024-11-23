@@ -7,6 +7,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import "../compStyles/header.css"
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import SubHeader from './subHeader';
 function Header() {
 
     const [currentDate, setCurrentDate] = useState(new Date());
@@ -65,6 +66,9 @@ function Header() {
                     isExpAcc ? <ArrowDropUpIcon/> : <ArrowDropDownIcon/>
                 }
             </div>
+        </section>
+        <section className='sub-header-h-sec'>
+            <SubHeader/>
         </section>
     </>
 }

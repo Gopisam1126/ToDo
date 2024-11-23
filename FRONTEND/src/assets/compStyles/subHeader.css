@@ -1,0 +1,64 @@
+:root {
+
+    /* color pallet - 1 */
+
+    --primary-c: #17153B;
+    --primary-c2: #2E236C;
+    --sec-low-c: #433D8B;
+    --secondary-c: #C8ACD6;
+
+    /* color pallet - 2 */
+
+    --cp2-primary: #222831;
+    --cp2-primary2: #393E46;
+    --cp2-secondary: #00ADB5;
+    --cp2-t: #EEEEEE;
+
+    /* sub colors */
+
+    --sub-col-1: #2C2C3D;
+
+    /* font families */
+
+    --font-fam-p: "Poppins", serif;
+    --font-fam-sec: "Raleway", sans-serif;
+    --font-fam-Itim: "Itim", serif;
+
+    /* font sizes */
+
+    --font-s-h1: 3.5rem;
+    --font-s-h2: 3rem;
+    --font-s-p: 2rem;
+    --font-s-desc: 1.7rem;
+    --font-s-span: 1.3rem;
+    --font-s-sm: 0.8rem;
+    
+}
+.sub-h-main-c, .group-view-c, .task-view-c, .filter-c {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-weight: 500;
+}
+.sub-h-main-c {
+    margin-top: 2rem;
+}
+.task-view-c, .group-view-c, .filter-c {
+    cursor: pointer;
+}
+.task-view-c {
+    margin-left: 2rem;
+}
+.filter-c {
+    position: relative;
+    left: 50rem;
+}
+.sub-h-sep-hr {
+    margin-top: 1.5rem;
+    margin-bottom: 1.2rem;
+    opacity: 0.4;
+}
+.active-view {
+    /* color: green; */
+    color: var(--secondary-c);
+}
