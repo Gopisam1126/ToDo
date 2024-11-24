@@ -37,13 +37,12 @@ function Header() {
         <section className="header-main-sec">
             <div className="welcome-main">
                 <h2 className="welcome-head">
-                    Welcome
-                    <span> {username || "Loading..."} 👋</span>
+                    {
+                        username ? "Welcome" : ""
+                    }
+                    <span> {username || "Session Timedout Please Login again"} 👋</span>
                 </h2>
             </div>
-            {/* <div className="right-items">
-
-            </div> */}
             <div className="searchbar-c">
                 <input type="search" name="search" id="search" className="searchbar" placeholder="Search" autoComplete='off' />
                 <div className="search-icon-c">

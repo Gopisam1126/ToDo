@@ -70,3 +70,7 @@
     left: -4.5rem;
     cursor: pointer;
 }
+.status-messsage {
+    margin-top: 0.8rem;
+    text-align: center;
+}

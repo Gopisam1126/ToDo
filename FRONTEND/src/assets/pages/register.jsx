@@ -15,6 +15,8 @@ function Register() {
         setpass: ""
     })
 
+    const [message, setMessage] = useState("");
+    const [isError, setIsError] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
     const [isVisiblec, setIsVisiblec] = useState(false);
 
@@ -45,9 +47,13 @@ function Register() {
                     "Content-Type": "application/json",
                 },
             });
-            console.log(res);
+            // console.log(res);
+            setMessage(res.data.message)
+            setIsError(false);
         } catch (error) {
-            console.log(error);
+            // console.log(error);
+            setMessage(error.response?.data?.message || 'An error occurred!');
+            setIsError(true);
         }
     }
 
@@ -130,6 +136,11 @@ function Register() {
                     </div>
                     <div className="login-btn-c">
                         <input type="submit" value="Sign Up" className="login-btn" />
+                    </div>
+                    <div className="disply-status-c">
+                        <p className="status-messsage" style={{ color: isError ? 'orange' : 'green' }}>
+                            {message}
+                        </p>
                     </div>
                     <hr className="sep-hr" />
                     <div className="login-with-c">

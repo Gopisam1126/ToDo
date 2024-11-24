@@ -160,3 +160,7 @@
 .l-signup:hover {
     text-decoration: underline;
 }
+.status-message {
+    margin-top: 0.8rem;
+    text-align: center;
+}

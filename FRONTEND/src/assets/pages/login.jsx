@@ -13,6 +13,9 @@ function Login() {
         username: "",
         pass: ""
     })
+
+    const [message, setMessage] = useState("");
+    const [isError, setIsError] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
 
     function handleInputChange(e) {
@@ -38,8 +41,11 @@ function Login() {
                 localStorage.setItem("token", response.data.token);
                 navigate(`/home/${formData.username}`);
             }
+            setMessage(response.data.message);
+            setIsError(false);
         } catch (error) {
-            alert("An Error Occured PLease try again Later or Check credentials", error)
+            setMessage(error.response?.data?.message || 'Error Logging in.😑')
+            setIsError(true);
         }
     }
 
@@ -75,6 +81,11 @@ function Login() {
                     <div className="login-btn-c">
                         <input type="submit" value="Login" className="login-btn" />
                         <a href="#" className="fgt-pass">Forgot Password</a>
+                    </div>
+                    <div className="status-msg-c">
+                        <p className="status-message" style={{color: isError ? 'orange' : 'green'}}>
+                            {message}
+                        </p>
                     </div>
                     <hr className="sep-hr" />
                     <div className="login-with-c">

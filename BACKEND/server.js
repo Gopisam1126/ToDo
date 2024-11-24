@@ -87,18 +87,16 @@ app.post("/register", async (req, res) => {
             console.log("Error creating user Table!");
         }
 
-        res.status(201).json({ message: "User registered successfully" });
+        res.status(201).json({ message: "User registered successfully😎" });
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Server error" });
+        res.status(500).json({ message: "Cannot register Account. PLease try again!😑" });
     }
 })
 
 app.post("/login", async (req, res) => {
-    // console.log("req.body : ", req.body);
     const {username, pass} = req.body;
-
 
     try {
         const user = await pg.query("SELECT username, password FROM users WHERE username = $1", [username]);
@@ -106,22 +104,21 @@ app.post("/login", async (req, res) => {
         
 
         if (user.rows.length === 0) {
-            return res.status(400).json({error: "Invalid Username!!!"});
+            return res.status(400).json({error: "Invalid Username!!!🙄"});
         }
 
         const match = await bcrypt.compare(pass, user.rows[0].password);
 
         if (!match) {
-            return res.status(400).send({error: "Incorrect Password!!!"});
+            return res.status(400).send({error: "Incorrect Password!!!🙄"});
         }
 
-        const token = jwt.sign({username}, SECRET_KEY, {expiresIn: "3h"});
+        const token = jwt.sign({username}, SECRET_KEY, {expiresIn: "10h"});
 
-        res.status(200).json({message: "Login Successful", token, username});
+        res.status(200).json({message: "Login Successful😎", token, username});
 
     } catch (error) {
-        console.log("An error occured",error);
-        res.status(500).json({ error: "Server error" });
+        res.status(500).json({ message: "Error Logging in😑. PLease try again" });
     }
 })
 
