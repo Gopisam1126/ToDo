@@ -5,6 +5,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import MenuIcon from '@mui/icons-material/Menu';
+import GroupModal from "./groupModal";
 import { useState } from "react";
 function Sidepanel() {
 
@@ -12,6 +13,7 @@ function Sidepanel() {
     const [isExpandedt, setIsExpandedt] = useState(false);
     const [isActiveTask, setIsActiveTask] = useState(true);
     const [isOpen, setIsOpen] = useState(true);
+    const [isModalOpen, setIsModalOpen] = useState(true);
 
 
     function expandMore() {
@@ -26,9 +28,13 @@ function Sidepanel() {
         setIsOpen(!isOpen);
     }
 
-    // function setTaskStatus() {
-    //     setIsActiveTask(!isActiveTask);
-    // }
+    function openModal() {
+        setIsModalOpen(true);
+    }
+
+    function closeModal() {
+        setIsModalOpen(false);
+    }
 
     return <>
         <section className={`sp-main-sec ${isOpen ? "open" : "close"}`}>
@@ -55,7 +61,7 @@ function Sidepanel() {
                                 isExpandedg ? <ExpandLessIcon/> : <ExpandMoreIcon/>
                             }
                         </div>
-                        <div className="add-new-group-c">
+                        <div className="add-new-group-c" onClick={openModal}>
                             <AddCircleOutlineIcon style={{
                                 position: "relative",
                                 left: "4.5rem",
@@ -128,6 +134,10 @@ function Sidepanel() {
                     }
                 </div>
             </div>
+            <GroupModal 
+                isOpen={isModalOpen}
+                onClose={closeModal}
+            />
         </section>
     </>
 }

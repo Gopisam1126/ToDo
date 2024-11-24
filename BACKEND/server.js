@@ -80,7 +80,7 @@ app.post("/register", async (req, res) => {
                 status VARCHAR(50),
                 timestamp TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
                 group_head VARCHAR(500),
-                gruop_desc TEXT,
+                group_desc TEXT,
                 group_priority VARCHAR(50),
                 group_timestamp TIMESTAMPTZ DEFAULT NULL
             )
@@ -124,7 +124,36 @@ app.post("/login", async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: "Error Logging in😑. PLease try again" });
     }
-})
+});
+
+app.post("/newgroup", async (req, res) => {
+    const { group_head, group_desc, group_priority } = req.body;
+    const token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+        return res.status(401).json({ error: "No token provided" });
+    }
+
+    try {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const username = decoded.username;
+
+        if (!username) {
+            return res.status(401).json({ error: "Unauthorized access" });
+        }
+
+        const insertGroupQuery = `
+            INSERT INTO ${username} (group_head, group_desc, group_priority, group_timestamp)
+            VALUES ($1, $2, $3, CURRENT_TIMESTAMP)
+        `;
+        await pg.query(insertGroupQuery, [group_head, group_desc, group_priority]);
+
+        res.status(201).json({ message: "New group added successfully! 😎" });
+    } catch (error) {
+        console.error("Error adding group:", error);
+        res.status(500).json({ message: "Unable to add group, please try again! 😑" });
+    }
+});
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
