@@ -79,6 +79,10 @@ app.post("/register", async (req, res) => {
                 priority VARCHAR(50),
                 status VARCHAR(50),
                 timestamp TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+                group_head VARCHAR(500),
+                gruop_desc TEXT,
+                grp_priority VARCHAR(50),
+                grp_timestamp TIMESTAMPTZ DEFAULT NULL
             )
         `;
         const userTableQ = await pg.query(createTableQ);
