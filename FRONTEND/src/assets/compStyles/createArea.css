@@ -42,7 +42,6 @@
 .item-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    /* grid-template-columns: auto auto auto; */
     row-gap: 2rem;
 }
 
@@ -67,12 +66,13 @@
 
 .item-head-c {
     padding-bottom: 0.4rem;
-    width: 22rem;
+    max-width: 22rem;
+    min-width: 22rem;
 }
 .add-new-grp-icon {
-    position: relative;
-    top: 0.2rem;
-    left: 5.5rem;
+    position: absolute;
+    top: 2rem;
+    left: 26.5rem;
 }
 .add-new-grp-icon:hover {
     color: var(--green-c);
@@ -121,8 +121,22 @@
     gap: 0.4rem;
 }
 
+.priority {
+    position: absolute;
+    left: 17rem;
+}
 .grp-priority-c {
-    position: relative;
-    left: 15.5rem;
+    position: absolute;
+    left: 22rem;
+    width: 6rem;
+    text-align: center;
+}
+.low-priority {
+    color: var(--green-c);
+}
+.medium-priority {
+    color: var(--orange-c);
+}
+.high-priority {
     color: var(--red-c);
 }

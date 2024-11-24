@@ -34,7 +34,7 @@ app.use(express.urlencoded({ extended: true }));
 const SECRET_KEY = process.env.SECRET_KEY;
 
 app.get("/getuser", async (req, res) => {
-    const token = req.headers.authorization?.split(" ")[1]; // Get the token from the Authorization header
+    const token = req.headers.authorization?.split(" ")[1];
     
     if (!token) {
         return res.status(401).json({ error: "No token provided" });
@@ -49,6 +49,42 @@ app.get("/getuser", async (req, res) => {
         res.status(401).json({ error: "Invalid token" });
     }
 });
+
+app.get("/groupdetails", async (req, res) => {
+    const token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+        return res.status(401).json({message: "Error Accessing token!!!"})
+    }
+
+    try {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const username = decoded.username;
+
+        const grpResQ = `SELECT id, group_head, group_desc, group_priority, group_timestamp FROM ${username}`;
+        const grpRes = await pg.query(grpResQ);
+
+        if (grpRes.rows.length > 0) {
+            const groups = await Promise.all(grpRes.rows.map((group) => {
+                let {id, group_head, group_desc, group_priority, group_timestamp} = group;
+
+                return {
+                    id,
+                    group_head,
+                    group_desc,
+                    group_priority,
+                    group_timestamp
+                }
+            }));
+            res.json(groups);
+        } else {
+            res.status(500).json({ message: "cannot fetch group details😑, Please try again😊" });
+        }
+
+    } catch (error) {
+        res.status(500).json({ error: "An error occurred. Please try again later." });
+    }
+})
 
 
 app.post("/register", async (req, res) => {

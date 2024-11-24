@@ -6,15 +6,16 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import MenuIcon from '@mui/icons-material/Menu';
 import GroupModal from "./groupModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 function Sidepanel() {
 
     const [isExpandedg, setIsExpandedg] = useState(false);
     const [isExpandedt, setIsExpandedt] = useState(false);
     const [isActiveTask, setIsActiveTask] = useState(true);
     const [isOpen, setIsOpen] = useState(true);
-    const [isModalOpen, setIsModalOpen] = useState(true);
-
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [groups, setGroups] = useState([]);
 
     function expandMore() {
         setIsExpandedg(!isExpandedg);
@@ -36,10 +37,24 @@ function Sidepanel() {
         setIsModalOpen(false);
     }
 
+    useEffect(() => {
+        async function getGroups() {
+            try {
+                const token = localStorage.getItem('token');
+                const grpRes = await axios.get("http://localhost:3000/groupdetails", {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                setGroups(grpRes.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        getGroups();
+    }, []);
+
     return <>
         <section className={`sp-main-sec ${isOpen ? "open" : "close"}`}>
             <div className="sp-main-head">
-                {/* <h1>PANEL</h1> */}
                 <div className="close-i" onClick={handleSidepanel}>
                     {
                         isOpen ? <CloseIcon style={{
@@ -73,10 +88,19 @@ function Sidepanel() {
                         isExpandedg ? (
                             <div className="gm-b-c">
                                 <ul>
-                                    <li className="gm-exp-li">group 1 <span className="num-tsk">(4)</span></li>
-                                    <li className="gm-exp-li">group 2 <span className="num-tsk">(6)</span></li>
-                                    <li className="gm-exp-li">group 3 <span className="num-tsk">(2)</span></li>
-                                    <li className="gm-exp-li">group 4 <span className="num-tsk">(10)</span></li>
+                                    {
+                                        groups.length > 0 ? (
+                                            groups.map((group) => (
+                                                <div key={group.id}>
+                                                    <li className="gm-exp-li">
+                                                        - {group.group_head} (4)
+                                                    </li>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <p>No Groups Available</p>
+                                        )
+                                    }
                                 </ul>
                             </div>
                         ) : ""
