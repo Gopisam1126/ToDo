@@ -39,7 +39,15 @@
     
 }
 
+.item-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    /* grid-template-columns: auto auto auto; */
+    row-gap: 2rem;
+}
+
 .items-c {
+    position: relative;
     background: var(--items-c-col);
     width: 30rem;
     border-radius: 0.8rem;
@@ -59,11 +67,14 @@
 
 .item-head-c {
     padding-bottom: 0.4rem;
+    width: 22rem;
 }
 .add-new-grp-icon {
     position: relative;
     top: 0.2rem;
     left: 5.5rem;
+}
+.add-new-grp-icon:hover {
     color: var(--green-c);
 }
 
@@ -112,6 +123,6 @@
 
 .grp-priority-c {
     position: relative;
-    left: 16.5rem;
+    left: 15.5rem;
     color: var(--red-c);
 }

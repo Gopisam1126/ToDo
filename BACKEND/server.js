@@ -78,11 +78,11 @@ app.post("/register", async (req, res) => {
                 end_date DATE,
                 priority VARCHAR(50),
                 status VARCHAR(50),
-                timestamp TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+                timestamp TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
                 group_head VARCHAR(500),
                 gruop_desc TEXT,
-                grp_priority VARCHAR(50),
-                grp_timestamp TIMESTAMPTZ DEFAULT NULL
+                group_priority VARCHAR(50),
+                group_timestamp TIMESTAMPTZ DEFAULT NULL
             )
         `;
         const userTableQ = await pg.query(createTableQ);
@@ -117,7 +117,7 @@ app.post("/login", async (req, res) => {
             return res.status(400).send({error: "Incorrect Password!!!🙄"});
         }
 
-        const token = jwt.sign({username}, SECRET_KEY, {expiresIn: "10h"});
+        const token = jwt.sign({username}, SECRET_KEY);
 
         res.status(200).json({message: "Login Successful😎", token, username});
 
