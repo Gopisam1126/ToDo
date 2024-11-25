@@ -1,6 +1,7 @@
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
-import "../compStyles/CreateArea.css"
+import DeleteIcon from '@mui/icons-material/Delete';
+import "../compStyles/CreateArea.css";
 import { useEffect, useState } from 'react';
 import axios from "axios";
 
@@ -22,6 +23,22 @@ function CreateArea() {
         }
         getGroups();
     }, []);
+
+    // function to handle deletion of group
+
+    async function handleDelete(groupId) {
+        try {
+            const token = localStorage.getItem('token');
+            await axios.delete(`http://localhost:3000/groupdetails/${groupId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
+            setGroups((prevGrp) => prevGrp.filter(group => group.id !== groupId));
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     // Function to format timestamp to DD/MM/YYYY
     function formatDate(timestamp) {
@@ -62,6 +79,9 @@ function CreateArea() {
                                         </h2>
                                         <div className="add-new-grp-icon">
                                             <AddCircleOutlineIcon />
+                                        </div>
+                                        <div className="delete-grp-icon" onClick={() => handleDelete(group.id)}>
+                                            <DeleteIcon/>
                                         </div>
                                     </div>
                                     <p className="group-desc">

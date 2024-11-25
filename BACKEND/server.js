@@ -191,6 +191,53 @@ app.post("/newgroup", async (req, res) => {
     }
 });
 
+app.delete("/groupdetails/:id", async (req, res) => {
+    const {id} = req.params;
+    const token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+        return res.status(401).json({message: "Error : No token provided"});
+    }
+
+    try {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const username = decoded.username;
+
+        if (!username) {
+            return res.status(401).json({message: "You sneaky Bast*red you are not Authorized🫠"});
+        }
+
+        await pg.query('BEGIN');
+
+        await pg.query(`DELETE FROM ${username} WHERE id = $1`, [id]);
+
+        await pg.query(`
+            WITH updated_rows AS (
+                SELECT id AS old_id, ROW_NUMBER() OVER (ORDER BY id) AS new_id FROM ${username}
+            )
+            UPDATE ${username}
+            SET id = updated_rows.new_id
+            FROM updated_rows
+            WHERE ${username}.id = updated_rows.old_id
+        `);
+
+        await pg.query(`
+            SELECT SETVAL(
+                pg_get_serial_sequence('${username}', 'id'),
+                1,
+                false
+            );
+        `);
+
+        await pg.query("COMMIT");
+
+        res.status(200).json({message: "Group deletion Successful😊"});
+    } catch (error) {
+        await pg.query("ROLLBACK");
+        res.status(500).json({message: "Error Deleting Group🫠"});
+    }
+});
+
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });

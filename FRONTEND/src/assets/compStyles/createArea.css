@@ -69,9 +69,17 @@
     max-width: 22rem;
     min-width: 22rem;
 }
-.add-new-grp-icon {
+.delete-grp-icon, .add-new-grp-icon {
     position: absolute;
     top: 2rem;
+}
+.delete-grp-icon {
+    left: 24rem;
+}
+.delete-grp-icon:hover {
+    color: var(--red-c);
+}
+.add-new-grp-icon {
     left: 26.5rem;
 }
 .add-new-grp-icon:hover {
