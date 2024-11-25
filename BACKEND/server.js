@@ -211,23 +211,22 @@ app.delete("/groupdetails/:id", async (req, res) => {
 
         await pg.query(`DELETE FROM ${username} WHERE id = $1`, [id]);
 
-        await pg.query(`
-            WITH updated_rows AS (
-                SELECT id AS old_id, ROW_NUMBER() OVER (ORDER BY id) AS new_id FROM ${username}
-            )
-            UPDATE ${username}
-            SET id = updated_rows.new_id
-            FROM updated_rows
-            WHERE ${username}.id = updated_rows.old_id
-        `);
+        // await pg.query(`
+        //     WITH updated_rows AS (
+        //         SELECT id AS old_id, ROW_NUMBER() OVER (ORDER BY id) AS new_id FROM ${username}
+        //     )
+        //     UPDATE ${username}
+        //     SET id = updated_rows.new_id
+        //     FROM updated_rows
+        //     WHERE ${username}.id = updated_rows.old_id
+        // `);
 
-        await pg.query(`
-            SELECT SETVAL(
-                pg_get_serial_sequence('${username}', 'id'),
-                1,
-                false
-            );
-        `);
+        // await pg.query(`
+        //     SELECT SETVAL(
+        //         pg_get_serial_sequence('${username}', 'id'),
+        //         (SELECT COALESCE(MAX(id), 1) FROM ${username}) + 1
+        //     );
+        // `);        
 
         await pg.query("COMMIT");
 
