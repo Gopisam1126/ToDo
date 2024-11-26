@@ -86,44 +86,44 @@ app.get("/groupdetails", async (req, res) => {
     }
 });
 
-// app.get("/taskdetails", async (req, res) => {
-//     const token = req.headers.authorization?.split(" ")[1];
+app.get("/taskdetails", async (req, res) => {
+    const token = req.headers.authorization?.split(" ")[1];
 
-//     if (!token) {
-//         return res.status(401).json({message: "Authentication Error⚠️ - No token provided🙄"})
-//     }
+    if (!token) {
+        return res.status(401).json({message: "Authentication Error⚠️ - No token provided🙄"})
+    }
 
-//     try {
-//         const decoded = jwt.verify(token, SECRET_KEY);
-//         const username = decoded.username;
+    try {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const username = decoded.username;
 
-//         const taskResQ = `SELECT id, task_head, task_desc, start_date, end_date, priority, status, timestamp FROM ${username}`;
-//         const taskRes = await pg.query(taskResQ);
+        const taskResQ = `SELECT id, task_head, task_desc, start_date, end_date, priority, status, timestamp FROM ${username}`;
+        const taskRes = await pg.query(taskResQ);
 
-//         if (taskRes.rows.length > 0) {
-//             const tasks = await Promise.all(taskRes.rows.map((task) => {
-//                 let {id, task_head, task_desc, start_date, end_date, priority, status, timestamp} = task;
+        if (taskRes.rows.length > 0) {
+            const tasks = await Promise.all(taskRes.rows.map((task) => {
+                let {id, task_head, task_desc, start_date, end_date, priority, status, timestamp} = task;
 
-//                 return {
-//                     id,
-//                     task_head,
-//                     task_desc,
-//                     start_date,
-//                     end_date,
-//                     priority,
-//                     status,
-//                     timestamp
-//                 }
-//             }));
-//             res.json(tasks);
-//         } else {
-//             res.status(500).json({ message: "cannot fetch task details😑, Please try again😊" });
-//         }
+                return {
+                    id,
+                    task_head,
+                    task_desc,
+                    start_date,
+                    end_date,
+                    priority,
+                    status,
+                    timestamp
+                }
+            }));
+            res.json(tasks);
+        } else {
+            res.status(500).json({ message: "cannot fetch task details😑, Please try again😊" });
+        }
 
-//     } catch (error) {
-//         res.status(500).json({ error: "An error occurred. Please try again later." });
-//     }
-// })
+    } catch (error) {
+        res.status(500).json({ error: "An error occurred. Please try again later." });
+    }
+})
 
 
 app.post("/register", async (req, res) => {

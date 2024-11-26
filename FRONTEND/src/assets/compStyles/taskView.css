@@ -38,3 +38,102 @@
     --font-s-sm: 0.8rem;
     
 }
+
+.item-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 2rem;
+}
+
+.t-items-c {
+    position: relative;
+    background: var(--items-c-col);
+    width: 35rem;
+    border-radius: 0.8rem;
+    padding: 1.5rem 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+.items-c:hover {
+    scale: 1.01;
+    box-shadow: 0.5rem 0.6rem 0.5rem 0.1rem #222831;
+}
+
+.item-head-c {
+    display: flex;
+    align-items: center;
+}
+
+.item-head-c {
+    padding-bottom: 0.4rem;
+    max-width: 22rem;
+    min-width: 22rem;
+}
+.delete-task-icon, .add-new-task-icon {
+    position: absolute;
+    top: 2rem;
+}
+.delete-task-icon {
+    left: 28.5rem;
+}
+.delete-task-icon:hover {
+    color: var(--red-c);
+}
+.add-new-task-icon {
+    left: 31.5rem;
+}
+.add-new-task-icon:hover {
+    color: var(--green-c);
+}
+
+.group-desc {
+    width: 23rem;
+    padding-bottom: 1.5rem;
+}
+
+.status-c {
+    margin-bottom: 1.2rem;
+}
+.status {
+    transform: translateX(-0.7rem);
+    font-weight: 600;
+}
+.pending {
+    color: var(--orange-c);
+}
+.completed {
+    color: var(--green-c);
+}
+
+.task-footer-c {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.priority--main-c {
+    position: absolute;
+    left: 25rem;
+}
+.task-priority-c, .start-date-c, .end-date-c {
+    background: var(--sub-col-1);
+    padding: 0.3rem 0.5rem;
+    border-radius: 0.6rem;
+}
+.start-date-c, .end-date-c, .task-priority-c {
+    margin-top: 0.3rem;
+    transform: translateX(-0.15rem);
+}
+.task-priority-c {
+    width: 8rem;
+    text-align: center;
+}
+.low-priority {
+    color: var(--green-c);
+}
+.medium-priority {
+    color: var(--orange-c);
+}
+.high-priority {
+    color: var(--red-c);
+}
