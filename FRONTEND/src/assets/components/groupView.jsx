@@ -7,6 +7,8 @@ import axios from "axios";
 
 function GroupView() {
     const [groups, setGroups] = useState([]);
+    // console.log(groups.filter(group => group.group_head !== null));
+    
 
     useEffect(() => {
         async function getGroups() {
@@ -68,7 +70,9 @@ function GroupView() {
             <div className="item-grid">
                 {
                     groups.length > 0 ? (
-                        groups.map((group) => {
+                        groups
+                        .filter(group => group.group_head !== null)
+                        .map((group) => {
                             const { day, month, year } = formatDate(group.group_timestamp);
                             return (
                                 <div className='items-c' key={group.id}>
