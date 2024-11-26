@@ -16,7 +16,11 @@
 
     /* sub colors */
 
+    --items-c-col: #24262C;
     --sub-col-1: #2C2C3D;
+    --green-c: #008000;
+    --orange-c: #FFA500;
+    --red-c: #FF0000;
 
     /* font families */
 
@@ -28,13 +32,13 @@
 
     --font-s-h1: 3.5rem;
     --font-s-h2: 3rem;
-    --font-s-l: 2.5rem;
     --font-s-p: 2rem;
     --font-s-desc: 1.7rem;
     --font-s-span: 1.3rem;
     --font-s-sm: 0.8rem;
     
 }
+
 
 .sp-main-sec {
     background: var(--sub-col-1);
@@ -94,8 +98,18 @@
     margin-top: 1.2rem;
     cursor: pointer;
 }
-.status {
-    position: relative;
+.pending {
+    color: var(--orange-c);
+}
+.completed {
+    color: var(--green-c);
+}
+.tsk-exp-li {
+    display: flex;
+    align-items: center;
+}
+.task-status {
+    position: absolute;
     left: 0.8rem;
 }
 .green {

@@ -95,7 +95,6 @@
     margin-bottom: 1.2rem;
 }
 .status {
-    transform: translateX(-0.7rem);
     font-weight: 600;
 }
 .pending {

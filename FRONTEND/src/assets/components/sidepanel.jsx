@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import "../compStyles/sidepanel.css";
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -13,11 +12,11 @@ function Sidepanel() {
 
     const [isExpandedg, setIsExpandedg] = useState(false);
     const [isExpandedt, setIsExpandedt] = useState(false);
-    const [isActiveTask, setIsActiveTask] = useState(true);
     const [isOpen, setIsOpen] = useState(true);
     const [isGrpModal, setIsGrpModal] = useState(false);
     const [isTaskModal, setIsTaskModal] = useState(false);
     const [groups, setGroups] = useState([]);
+    const [tasks, setTasks] = useState([]);
 
     function expandMore() {
         setIsExpandedg(!isExpandedg);
@@ -47,19 +46,45 @@ function Sidepanel() {
         setIsTaskModal(false);
     }
 
-    useEffect(() => {
-        async function getGroups() {
-            try {
-                const token = localStorage.getItem('token');
-                const grpRes = await axios.get("http://localhost:3000/groupdetails", {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-                setGroups(grpRes.data);
-            } catch (error) {
-                console.log(error);
-            }
+    function getStatusClass(status) {
+        if (status === 'Pending' || status === "pending") return 'pending';
+        if (status === 'Completed' || status === "completed") return 'completed';
+        return '';
+    }
+
+    async function getGroups() {
+        try {
+            const token = localStorage.getItem('token');
+            const grpRes = await axios.get("http://localhost:3000/groupdetails", {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            return grpRes.data.filter(group => group.group_head !== null);
+        } catch (error) {
+            console.log(error);
+            return [];
         }
-        getGroups();
+    }
+
+    async function getTasks() {
+        try {
+            const token = localStorage.getItem('token');
+            const taskRes = await axios.get("http://localhost:3000/taskdetails", {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            return taskRes.data.filter(task => task.task_head !== null);
+        } catch (error) {
+            console.log(error);
+            return [];
+        }
+    }
+
+    useEffect(() => {
+        async function fetchData() {
+            const [fetchedGroups, fetchedTasks] = await Promise.all([getGroups(), getTasks()]);
+            setGroups(fetchedGroups);
+            setTasks(fetchedTasks);
+        }
+        fetchData();
     }, []);
 
     return <>
@@ -101,11 +126,10 @@ function Sidepanel() {
                                     {
                                         groups.length > 0 ? (
                                             groups
-                                            .filter(group => group.group_head !== null)
                                             .map((group) => (
                                                 <div key={group.id}>
                                                     <li className="gm-exp-li">
-                                                        - {group.group_head} (4)
+                                                        - {group.group_head}
                                                     </li>
                                                 </div>
                                             ))
@@ -140,30 +164,21 @@ function Sidepanel() {
                         isExpandedt ? (
                             <div className="gm-b-c">
                                 <ul>
-                                    <li className="tsk-exp-li">
-                                        Task 1
-                                        <span className={`status ${isActiveTask ? "orange" : "green"}`}>
-                                            {isActiveTask ? "(Pending)" : "(Completed)"}
-                                        </span>
-                                    </li>
-                                    <li className="tsk-exp-li">
-                                        Task 2
-                                        <span className={`status ${isActiveTask ? "orange" : "green"}`}>
-                                            {isActiveTask ? "(Pending)" : "(Completed)"}
-                                        </span>
-                                    </li>
-                                    <li className="tsk-exp-li">
-                                        Task 3
-                                        <span className={`status ${isActiveTask ? "orange" : "green"}`}>
-                                            {isActiveTask ? "(Pending)" : "(Completed)"}
-                                        </span>
-                                    </li>
-                                    <li className="tsk-exp-li">
-                                        Task 4
-                                        <span className={`status ${isActiveTask ? "orange" : "green"}`}>
-                                            {isActiveTask ? "(Pending)" : "(Completed)"}
-                                        </span>
-                                    </li>
+                                    {
+                                        tasks.length > 0 ? (
+                                            tasks.map((task) => (
+                                                <div key={task.id}>
+                                                    <li className="tsk-exp-li">
+                                                        <div className={`status ${getStatusClass(task.status)}`}>
+                                                            - {task.task_head}
+                                                        </div>
+                                                    </li>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <p className="no-task-available">No Tasks Avilable</p>
+                                        )
+                                    }
                                 </ul>
                             </div>
                         ) : ""
