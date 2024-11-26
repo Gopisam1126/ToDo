@@ -1,0 +1,104 @@
+:root {
+
+    /* color pallet - 1 */
+
+    --primary-c: #17153B;
+    --primary-c2: #2E236C;
+    --sec-low-c: #433D8B;
+    --secondary-c: #C8ACD6;
+
+    /* color pallet - 2 */
+
+    --cp2-primary: #222831;
+    --cp2-primary2: #393E46;
+    --cp2-secondary: #00ADB5;
+    --cp2-t: #EEEEEE;
+
+    /* sub colors */
+
+    --items-c-col: #24262C;
+    --sub-col-1: #2C2C3D;
+    --green-c: #008000;
+    --orange-c: #FFA500;
+    --red-c: #FF0000;
+
+    /* font families */
+
+    --font-fam-p: "Poppins", serif;
+    --font-fam-sec: "Raleway", sans-serif;
+    --font-fam-Itim: "Itim", serif;
+
+    /* font sizes */
+
+    --font-s-h1: 3.5rem;
+    --font-s-h2: 3rem;
+    --font-s-p: 2rem;
+    --font-s-desc: 1.7rem;
+    --font-s-span: 1.3rem;
+    --font-s-sm: 0.8rem;
+    
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-container {
+    background: var(--sub-col-1);
+    padding: 2rem;
+    border-radius: 0.5rem;
+    max-width: 30rem;
+    width: 100%;
+    box-shadow: 0 4px 0.5rem rgba(0, 0, 0, 0.2);
+}
+
+.modal-container h2 {
+    margin-bottom: 1rem;
+}
+
+.modal-container label {
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.modal-container input,
+.modal-container textarea {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    font-family: var(--font-fam-p);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.modal-actions button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+.modal-actions button:first-child {
+    background: #f0f0f0;
+    color: #333;
+}
+
+.modal-actions button:last-child {
+    background: var(--secondary-c);
+    color: var(--sub-col-1);
+}

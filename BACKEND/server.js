@@ -3,7 +3,7 @@ import pkg from "pg";
 import dotenv from "dotenv";
 import cors from "cors";
 import bcrypt from "bcrypt";
-import jwt  from "jsonwebtoken";
+import jwt, { decode }  from "jsonwebtoken";
 
 const app = express();
 const port = 3000;
@@ -84,7 +84,46 @@ app.get("/groupdetails", async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: "An error occurred. Please try again later." });
     }
-})
+});
+
+// app.get("/taskdetails", async (req, res) => {
+//     const token = req.headers.authorization?.split(" ")[1];
+
+//     if (!token) {
+//         return res.status(401).json({message: "Authentication Error⚠️ - No token provided🙄"})
+//     }
+
+//     try {
+//         const decoded = jwt.verify(token, SECRET_KEY);
+//         const username = decoded.username;
+
+//         const taskResQ = `SELECT id, task_head, task_desc, start_date, end_date, priority, status, timestamp FROM ${username}`;
+//         const taskRes = await pg.query(taskResQ);
+
+//         if (taskRes.rows.length > 0) {
+//             const tasks = await Promise.all(taskRes.rows.map((task) => {
+//                 let {id, task_head, task_desc, start_date, end_date, priority, status, timestamp} = task;
+
+//                 return {
+//                     id,
+//                     task_head,
+//                     task_desc,
+//                     start_date,
+//                     end_date,
+//                     priority,
+//                     status,
+//                     timestamp
+//                 }
+//             }));
+//             res.json(tasks);
+//         } else {
+//             res.status(500).json({ message: "cannot fetch task details😑, Please try again😊" });
+//         }
+
+//     } catch (error) {
+//         res.status(500).json({ error: "An error occurred. Please try again later." });
+//     }
+// })
 
 
 app.post("/register", async (req, res) => {
@@ -190,6 +229,36 @@ app.post("/newgroup", async (req, res) => {
         res.status(500).json({ message: "Unable to add group, please try again! 😑" });
     }
 });
+
+app.post("/newtask", async (req, res) => {
+    const {task_head, task_desc, priority, startdate, enddate} = req.body;
+    const token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+        return res.status(401).json({message: "Authorization Failed- No token provided⚠️"});
+    }
+
+    try {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const username = decoded.username;
+
+        if (!username) {
+            return res.status(401).json({message: "Access Denied - Unauthorized user⚠️"});
+        }
+
+        const insertTaskQuery = `
+        INSERT INTO ${username} (task_head, task_desc, priority, start_date, end_date, status, timestamp)
+        VALUES ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP)
+        `;
+        await pg.query(insertTaskQuery, [task_head, task_desc, priority, startdate, enddate, "pending"]);
+
+        res.status(200).json({message: "New Task creation successful😊"});
+
+    } catch (error) {
+        console.error("Error adding task:", error);
+        res.status(500).json({ message: "Unable to add task, please try again! 😑" });
+    }
+})
 
 app.delete("/groupdetails/:id", async (req, res) => {
     const {id} = req.params;

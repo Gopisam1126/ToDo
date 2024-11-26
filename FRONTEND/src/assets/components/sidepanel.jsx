@@ -6,6 +6,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import MenuIcon from '@mui/icons-material/Menu';
 import GroupModal from "./groupModal";
+import TaskModal from "./taskModal";
 import { useEffect, useState } from "react";
 import axios from "axios";
 function Sidepanel() {
@@ -14,7 +15,8 @@ function Sidepanel() {
     const [isExpandedt, setIsExpandedt] = useState(false);
     const [isActiveTask, setIsActiveTask] = useState(true);
     const [isOpen, setIsOpen] = useState(true);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isGrpModal, setIsGrpModal] = useState(false);
+    const [isTaskModal, setIsTaskModal] = useState(false);
     const [groups, setGroups] = useState([]);
 
     function expandMore() {
@@ -29,12 +31,20 @@ function Sidepanel() {
         setIsOpen(!isOpen);
     }
 
-    function openModal() {
-        setIsModalOpen(true);
+    function openGrpModal() {
+        setIsGrpModal(true);
     }
 
-    function closeModal() {
-        setIsModalOpen(false);
+    function closeGrpModal() {
+        setIsGrpModal(false);
+    }
+    
+    function openTaskModal() {
+        setIsTaskModal(true)
+    }
+
+    function closeTaskModal() {
+        setIsTaskModal(false);
     }
 
     useEffect(() => {
@@ -76,7 +86,7 @@ function Sidepanel() {
                                 isExpandedg ? <ExpandLessIcon/> : <ExpandMoreIcon/>
                             }
                         </div>
-                        <div className="add-new-group-c" onClick={openModal}>
+                        <div className="add-new-group-c" onClick={openGrpModal}>
                             <AddCircleOutlineIcon style={{
                                 position: "relative",
                                 left: "4.5rem",
@@ -116,7 +126,7 @@ function Sidepanel() {
                                 isExpandedt ? <ExpandLessIcon/> : <ExpandMoreIcon/>
                             }
                         </div>
-                        <div className="add-new-task-c">
+                        <div className="add-new-task-c" onClick={openTaskModal}>
                             <AddCircleOutlineIcon style={{
                                 position: "relative",
                                 left: "5.5rem",
@@ -159,8 +169,12 @@ function Sidepanel() {
                 </div>
             </div>
             <GroupModal 
-                isOpen={isModalOpen}
-                onClose={closeModal}
+                isOpen={isGrpModal}
+                onClose={closeGrpModal}
+            />
+            <TaskModal
+                isOpen={isTaskModal}
+                onClose={closeTaskModal}
             />
         </section>
     </>

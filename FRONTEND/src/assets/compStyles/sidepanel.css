@@ -81,7 +81,7 @@
     margin-left: 0.8rem;
     cursor: pointer;
 }
-.add-new-group-c {
+.add-new-group-c, .add-new-task-c {
     cursor: pointer;
 }
 .tasks-main {
