@@ -1,0 +1,150 @@
+:root {
+
+    /* color pallet - 1 */
+
+    --primary-c: #17153B;
+    --primary-c2: #2E236C;
+    --sec-low-c: #433D8B;
+    --secondary-c: #C8ACD6;
+
+    /* color pallet - 2 */
+
+    --cp2-primary: #222831;
+    --cp2-primary2: #393E46;
+    --cp2-secondary: #00ADB5;
+    --cp2-t: #EEEEEE;
+
+    /* sub colors */
+
+    --items-c-col: #24262C;
+    --sub-col-1: #2C2C3D;
+    --green-c: #008000;
+    --orange-c: #FFA500;
+    --red-c: #FF0000;
+
+    /* font families */
+
+    --font-fam-p: "Poppins", serif;
+    --font-fam-sec: "Raleway", sans-serif;
+    --font-fam-Itim: "Itim", serif;
+
+    /* font sizes */
+
+    --font-s-h1: 3.5rem;
+    --font-s-h2: 3rem;
+    --font-s-p: 2rem;
+    --font-s-desc: 1.7rem;
+    --font-s-span: 1.3rem;
+    --font-s-sm: 0.8rem;
+    
+}
+
+.item-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 2rem;
+}
+
+.items-c {
+    position: relative;
+    background: var(--items-c-col);
+    width: 30rem;
+    border-radius: 0.8rem;
+    padding: 1.5rem 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+.items-c:hover {
+    scale: 1.01;
+    box-shadow: 0.5rem 0.6rem 0.5rem 0.1rem #222831;
+}
+
+.item-head-c, .progres-head, .created-timestamp-c, .created-date {
+    display: flex;
+    align-items: center;
+}
+
+.item-head-c {
+    padding-bottom: 0.4rem;
+    max-width: 22rem;
+    min-width: 22rem;
+}
+.delete-grp-icon, .add-new-grp-icon {
+    position: absolute;
+    top: 2rem;
+}
+.delete-grp-icon {
+    left: 24rem;
+}
+.delete-grp-icon:hover {
+    color: var(--red-c);
+}
+.add-new-grp-icon {
+    left: 26.5rem;
+}
+.add-new-grp-icon:hover {
+    color: var(--green-c);
+}
+
+.group-desc {
+    width: 23rem;
+    padding-bottom: 1.5rem;
+}
+
+.progres-head {
+    gap: 0.4rem;
+    padding-bottom: 0.3rem;
+}
+.progres-h-txt {
+    position: relative;
+    top: -0.1rem;
+}
+.stat-number {
+    position: relative;
+    left: 19rem;
+}
+.progres-bar-c {
+    padding-bottom: 1.5rem;
+}
+.progres-bg, .progres-overlay {
+    height: 0.8rem;
+    border-radius: 0.6rem;
+}
+.progres-bg {
+    width: 27rem;
+    background: var(--sub-col-1);
+}
+.progres-overlay {
+    width: 20rem;
+    background: var(--orange-c);
+}
+
+.created-date, .grp-priority-c {
+    background: var(--sub-col-1);
+    padding: 0.3rem 0.5rem;
+    border-radius: 0.6rem;
+}
+
+.created-date {
+    gap: 0.4rem;
+}
+
+.priority {
+    position: absolute;
+    left: 17rem;
+}
+.grp-priority-c {
+    position: absolute;
+    left: 22rem;
+    width: 6rem;
+    text-align: center;
+}
+.low-priority {
+    color: var(--green-c);
+}
+.medium-priority {
+    color: var(--orange-c);
+}
+.high-priority {
+    color: var(--red-c);
+}

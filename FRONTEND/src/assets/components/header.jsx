@@ -66,9 +66,6 @@ function Header() {
                 }
             </div>
         </section>
-        <section className='sub-header-h-sec'>
-            <SubHeader/>
-        </section>
     </>
 }
 

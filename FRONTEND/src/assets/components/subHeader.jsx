@@ -1,22 +1,9 @@
+/* eslint-disable react/prop-types */
 import ViewAgendaOutlinedIcon from '@mui/icons-material/ViewAgendaOutlined';
 import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import "../compStyles/subHeader.css";
-import { useState } from 'react';
-function SubHeader() {
-
-    const [isGroupView, setIsGroupView] = useState(true);
-    const [isTaskView, setisTaskView] = useState(false);
-
-    function setGroupView() {
-        setisTaskView(false);
-        setIsGroupView(true);
-    }
-
-    function setTaskView() {
-        setIsGroupView(false);
-        setisTaskView(true);
-    }
+function SubHeader({isGroupView, setGroupView, setTaskView}) {
 
     return <>
         <section>
@@ -30,7 +17,7 @@ function SubHeader() {
                     </div>
                 </div>
                 <div  className="task-view-c" onClick={setTaskView}>
-                    <div className={`group-view-c ${isTaskView ? "active-view" : ""}`}>
+                    <div className={`group-view-c ${!isGroupView ? "active-view" : ""}`}>
                         <FormatListBulletedOutlinedIcon/>
                         <p className="task-view-txt">
                             Task View
