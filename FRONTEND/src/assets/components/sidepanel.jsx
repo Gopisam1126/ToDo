@@ -100,7 +100,9 @@ function Sidepanel() {
                                 <ul>
                                     {
                                         groups.length > 0 ? (
-                                            groups.map((group) => (
+                                            groups
+                                            .filter(group => group.group_head !== null)
+                                            .map((group) => (
                                                 <div key={group.id}>
                                                     <li className="gm-exp-li">
                                                         - {group.group_head} (4)
