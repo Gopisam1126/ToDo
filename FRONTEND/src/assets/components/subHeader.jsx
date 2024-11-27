@@ -3,7 +3,26 @@ import ViewAgendaOutlinedIcon from '@mui/icons-material/ViewAgendaOutlined';
 import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import "../compStyles/subHeader.css";
+import { useRef, useState } from 'react';
 function SubHeader({isGroupView, setGroupView, setTaskView}) {
+
+    const [isExpanded, setIsExpanded] = useState(false);
+    const filterDropDown =useRef(null);
+
+    const handleFilterDropDown = () => {
+        if (filterDropDown.current) {
+            if (isExpanded) {
+                filterDropDown.current.style.height = "15rem";
+                requestAnimationFrame(() => {
+                    filterDropDown.current.style.height = "0";
+                });
+            } else {
+                filterDropDown.current.style.height = "15rem";
+                filterDropDown.current.style.overflow = "hidden";
+            }
+            setIsExpanded(!isExpanded);
+        }
+    };
 
     return <>
         <section>
@@ -24,7 +43,7 @@ function SubHeader({isGroupView, setGroupView, setTaskView}) {
                         </p>
                     </div>
                 </div>
-                <div className="filter-c">
+                <div className="filter-c" onClick={handleFilterDropDown}>
                     <FilterAltOutlinedIcon/>
                     <p className="filter-txt">
                         Filter
@@ -33,6 +52,38 @@ function SubHeader({isGroupView, setGroupView, setTaskView}) {
             </div>
             <hr className="sub-h-sep-hr" />
         </section>
+        <div ref={filterDropDown} className={`f-exp-c ${isExpanded ? "f-expanded" : "f-hide"}`}>
+            <div className="f-exp-items">
+                <p className="f-exp-i-txt">
+                    Pending
+                </p>
+            </div>
+            <div className="f-exp-items">
+                <p className="f-exp-i-txt">
+                    Completed
+                </p>
+            </div>
+            <div className="f-exp-items">
+                <p className="f-exp-i-txt">
+                    Past Due
+                </p>
+            </div>
+            <div className="f-exp-items">
+                <p className="f-exp-i-txt">
+                    High
+                </p>
+            </div>
+            <div className="f-exp-items">
+                <p className="f-exp-i-txt">
+                    Medium
+                </p>
+            </div>
+            <div className="f-exp-items">
+                <p className="f-exp-i-txt">
+                    Low
+                </p>
+            </div>
+        </div>
     </>
 }
 

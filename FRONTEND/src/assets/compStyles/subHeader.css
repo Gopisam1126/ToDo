@@ -59,6 +59,41 @@
     opacity: 0.4;
 }
 .active-view {
-    /* color: green; */
     color: var(--secondary-c);
+}
+
+.f-exp-c {
+    position: absolute;
+    right: 2rem;
+    top: 9.5rem;
+    background: rgba(39, 39, 39, 0.8);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    width: 11rem;
+    border-radius: 0.7rem;
+    overflow: hidden;
+    height: 0;
+    padding: 0 1.2rem;
+    z-index: 2;
+    transition: all 0.3s ease-in-out;
+}
+
+.f-expanded {
+    height: auto;
+    padding: 0.8rem 1.2rem;
+}
+
+.f-hide {
+    height: 0;
+    padding: 0 1.2rem;
+}
+.f-exp-items {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.7rem;
+    cursor: pointer;
+}
+.f-exp-items:hover {
+    text-decoration: underline;
 }

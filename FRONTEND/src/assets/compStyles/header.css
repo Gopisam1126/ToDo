@@ -72,3 +72,38 @@
     margin-left: 1.2rem;
     cursor: pointer;
 }
+.acc-exp-c {
+    position: absolute;
+    right: 2rem;
+    top: 5rem;
+    background: rgba(39, 39, 39, 0.8);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    width: 11rem;
+    border-radius: 0.7rem;
+    overflow: hidden;
+    height: 0;
+    padding: 0 1.2rem;
+    z-index: 2;
+    transition: all 0.3s ease-in-out;
+}
+
+.acc-expanded {
+    height: auto;
+    padding: 0.8rem 1.2rem;
+}
+
+.acc-hide {
+    height: 0;
+    padding: 0 1.2rem;
+}
+.acc-exp-items {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.7rem;
+    cursor: pointer;
+}
+.acc-exp-items:hover {
+    text-decoration: underline;
+}

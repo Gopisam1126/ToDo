@@ -4,19 +4,35 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import PersonIcon from '@mui/icons-material/Person';
+import GroupIcon from '@mui/icons-material/Group';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import LogoutIcon from '@mui/icons-material/Logout';
 import "../compStyles/header.css"
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
-import SubHeader from './subHeader';
 function Header() {
 
     const [currentDate, setCurrentDate] = useState(new Date());
     const [isExpAcc, setIsExpAcc] = useState(false);
     const [username, setUsername] = useState("");
+    const dropdownRef = useRef(null);
 
-    function handleAccDropDown() {
-        setIsExpAcc(!isExpAcc);
-    }
+    const handleAccDropDown = () => {
+        if (dropdownRef.current) {
+            if (isExpAcc) {
+                dropdownRef.current.style.height = "11rem";
+                requestAnimationFrame(() => {
+                    dropdownRef.current.style.height = "0";
+                });
+            } else {
+                dropdownRef.current.style.height = "11rem";
+                dropdownRef.current.style.overflow = "hidden";
+            }
+            setIsExpAcc(!isExpAcc);
+        }
+    };
+    
 
     useEffect(() => {
         async function getUsername() {
@@ -66,6 +82,32 @@ function Header() {
                 }
             </div>
         </section>
+        <div ref={dropdownRef} className={`acc-exp-c ${isExpAcc ? "acc-expanded" : "acc-hide"}`}>
+            <div className="acc-exp-items">
+                <PersonIcon/>
+                <p className="acc-exp-i-txt">
+                    Profile
+                </p>
+            </div>
+            <div className="acc-exp-items">
+                <GroupIcon/>
+                <p className="acc-exp-i-txt">
+                    Your Groups
+                </p>
+            </div>
+            <div className="acc-exp-items">
+                <AssignmentIcon/>
+                <p className="acc-exp-i-txt">
+                    Your Tasks
+                </p>
+            </div>
+            <div className="acc-exp-items">
+                <LogoutIcon/>
+                <p className="acc-exp-i-txt">
+                    Log out
+                </p>
+            </div>
+        </div>
     </>
 }
 
