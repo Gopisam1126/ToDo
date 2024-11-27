@@ -16,7 +16,11 @@
 
     /* sub colors */
 
+    --items-c-col: #24262C;
     --sub-col-1: #2C2C3D;
+    --green-c: #008000;
+    --orange-c: #FFA500;
+    --red-c: #FF0000;
 
     /* font families */
 
@@ -96,4 +100,13 @@
 }
 .f-exp-items:hover {
     text-decoration: underline;
+}
+.f-i-txt-high {
+    color: var(--red-c);
+}
+.f-i-txt-med {
+    color: var(--orange-c);
+}
+.f-i-txt-low {
+    color: var(--green-c);
 }

@@ -69,17 +69,17 @@ function SubHeader({isGroupView, setGroupView, setTaskView}) {
                 </p>
             </div>
             <div className="f-exp-items">
-                <p className="f-exp-i-txt">
+                <p className="f-exp-i-txt f-i-txt-high">
                     High
                 </p>
             </div>
             <div className="f-exp-items">
-                <p className="f-exp-i-txt">
+                <p className="f-exp-i-txt f-i-txt-med">
                     Medium
                 </p>
             </div>
             <div className="f-exp-items">
-                <p className="f-exp-i-txt">
+                <p className="f-exp-i-txt f-i-txt-low">
                     Low
                 </p>
             </div>
