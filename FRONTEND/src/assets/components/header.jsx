@@ -17,6 +17,8 @@ function Header() {
     const [isExpAcc, setIsExpAcc] = useState(false);
     const [username, setUsername] = useState("");
     const dropdownRef = useRef(null);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleAccDropDown = () => {
         if (dropdownRef.current) {
@@ -48,6 +50,23 @@ function Header() {
         }
         getUsername();
     }, []);
+
+    async function handleSearch() {
+        if(searchTerm.trim() === "") return;
+
+        try {
+            setIsLoading(true)
+            const token = localStorage.getItem('token');
+            const searchRes = await axios.get(`http://localhost:3000/tasklist/search?query=${searchTerm}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setTasks(searchRes.data);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsLoading(false);
+        }
+    }
 
     return <>
         <section className="header-main-sec">

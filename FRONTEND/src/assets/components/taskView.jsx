@@ -10,6 +10,7 @@ function TaskView() {
 
     const [tasks, setTasks] = useState([]);
 
+
     useEffect(() => {
         async function getTasks() {
             try {
@@ -24,6 +25,20 @@ function TaskView() {
         }
         getTasks();
     }, []);
+
+    async function handleDelete(taskId) {
+        try {
+            const token = localStorage.getItem('token');
+            await axios.delete(`http://localhost:3000/groupdetails/${taskId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
+            setTasks((prevGrp) => prevGrp.filter(group => group.id !== taskId));
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     // Function to get the appropriate class for priority
     function getPriorityClass(priority) {
@@ -65,7 +80,7 @@ function TaskView() {
                                         <div className="add-new-task-icon">
                                             <AddCircleOutlineIcon />
                                         </div>
-                                        <div className="delete-task-icon">
+                                        <div className="delete-task-icon" onClick={() => handleDelete(task.id)}>
                                             <DeleteIcon/>
                                         </div>
                                     </div>

@@ -258,6 +258,31 @@ app.post("/newtask", async (req, res) => {
         console.error("Error adding task:", error);
         res.status(500).json({ message: "Unable to add task, please try again! 😑" });
     }
+});
+
+app.post("tasklist/search", async (req, res) => {
+    const token = localStorage.getItem('token');
+    const {query} = req.query;
+
+    try {
+        const decoded = jwt.verify(tooken, SECRET_KEY);
+        const username = decoded.username;
+
+        const searchQ = `
+            SELECT * FROM ${username}
+            WHERE LOWER
+        `;
+
+        const values = [`${query}`];
+
+        const searchRes = await pg.query(searchQ, values);
+
+        res.status(200).json(searchRes.rows);
+
+    } catch (error) {
+        res.status(500).json({message: "Server Error😑, Error searching!!!"});
+    }
+
 })
 
 app.delete("/groupdetails/:id", async (req, res) => {
@@ -305,6 +330,23 @@ app.delete("/groupdetails/:id", async (req, res) => {
         res.status(500).json({message: "Error Deleting Group🫠"});
     }
 });
+
+// app.delete("/taskdetails/:id", (req, res) => {
+//     const token = localStorage.getItem("token");
+
+//     try {
+//         const decoded = jwt.verify(token, SECRET_KEY);
+//         const username = decoded.username;
+
+//         if (!username) {
+//             res.status(401).json({message: "Unauthorized Access⚠️"});
+//         }
+
+//         const taskDelQ = ``
+//     } catch (error) {
+        
+//     }
+// });
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
