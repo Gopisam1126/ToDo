@@ -260,26 +260,32 @@ app.post("/newtask", async (req, res) => {
     }
 });
 
-app.post("tasklist/search", async (req, res) => {
-    const token = localStorage.getItem('token');
-    const {query} = req.query;
+app.post("/tasklist/search", async (req, res) => {
+    const token = req.headers.authorization?.split(" ")[1];
+    const {query} = req.body;
+    console.log("Search Query received : ",query);
 
     try {
-        const decoded = jwt.verify(tooken, SECRET_KEY);
+        const decoded = jwt.verify(token, SECRET_KEY);
         const username = decoded.username;
+        console.log("Username : ",username);
 
         const searchQ = `
             SELECT * FROM ${username}
-            WHERE LOWER
+            WHERE LOWER(task_head) LIKE $1
         `;
 
-        const values = [`${query}`];
+        const values = [`%${query.toLowerCase()}%`];
+        console.log("Values : ",values);
 
         const searchRes = await pg.query(searchQ, values);
+        console.log("Search Results : ",searchRes);
 
         res.status(200).json(searchRes.rows);
 
     } catch (error) {
+        console.log("search error", error);
+        
         res.status(500).json({message: "Server Error😑, Error searching!!!"});
     }
 
