@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import "../compStyles/taskView.css";
 import { useEffect, useState } from 'react';
 import axios from "axios";
@@ -80,6 +81,9 @@ function TaskView({ tasks: searchTasks, isLoading }) {
                                     <h2 className="grouo-head">
                                         {task.task_head}
                                     </h2>
+                                    <div className="edit-icon-c-t">
+                                            <EditIcon/>
+                                    </div>
                                     <div className="add-new-task-icon">
                                         <AddCircleOutlineIcon />
                                     </div>

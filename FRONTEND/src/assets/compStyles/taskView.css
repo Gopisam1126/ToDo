@@ -69,7 +69,7 @@
     max-width: 22rem;
     min-width: 22rem;
 }
-.delete-task-icon, .add-new-task-icon {
+.delete-task-icon, .add-new-task-icon, .edit-icon-c-t {
     position: absolute;
     top: 2rem;
 }
@@ -84,6 +84,12 @@
 }
 .add-new-task-icon:hover {
     color: var(--green-c);
+}
+.edit-icon-c-t {
+    left: 25.5rem;
+}
+.edit-icon-c-t:hover {
+    color: var(--secondary-c);
 }
 
 .group-desc {

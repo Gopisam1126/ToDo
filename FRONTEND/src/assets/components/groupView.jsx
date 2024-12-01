@@ -2,6 +2,7 @@
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import "../compStyles/groupView.css";
 import { useEffect, useState } from 'react';
 import axios from "axios";
@@ -77,6 +78,9 @@ function GroupView({ groups: searchGroups, isLoading }) {
                                 <div className="items-c" key={group.id}>
                                     <div className="item-head-c">
                                         <h2 className="grouo-head">{group.group_head}</h2>
+                                        <div className="edit-icon-c">
+                                            <EditIcon/>
+                                        </div>
                                         <div className="add-new-grp-icon">
                                             <AddCircleOutlineIcon />
                                         </div>
