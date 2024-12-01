@@ -19,7 +19,6 @@ function Header({onSearch}) {
     const [username, setUsername] = useState("");
     const dropdownRef = useRef(null);
     const [term, setTerm] = useState('');
-    console.log("Header c - Term : ", term);
     // console.log("Header c - onSearch", onSearch);
     
     

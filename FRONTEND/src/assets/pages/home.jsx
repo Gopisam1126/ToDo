@@ -12,7 +12,7 @@ function Home() {
     const [isGroupView, setIsGroupView] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [tasks, setTasks] = useState([]);
-    console.log("Home - Tasks : ",tasks);
+    const [groups, setGroups] = useState([]);
 
     function handleGroupView() {
         setIsGroupView(true);
@@ -23,18 +23,25 @@ function Home() {
     }
 
     async function handleSearch( term ) {
-        console.log("Home - Term : ", term);
 
         try {
             setIsLoading(true)
             const token = localStorage.getItem('token');
-            const searchRes = await axios.post(
-                `http://localhost:3000/tasklist/search`, 
-                { query: term }, // Send query in the body
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
-            console.log("Home - searc Response", searchRes);
-            setTasks(searchRes.data);
+            if (isGroupView) {
+                const searchRes = await axios.post(
+                    `http://localhost:3000/grouplist/search`, 
+                    { query: term }, // Send query in the body
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+                setGroups(searchRes.data);
+            } else if (!isGroupView) {
+                const searchRes = await axios.post(
+                    `http://localhost:3000/tasklist/search`, 
+                    { query: term }, // Send query in the body
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+                setTasks(searchRes.data);
+            }
         } catch (error) {
             console.log("Error during search : ",error);
         } finally {
@@ -48,7 +55,10 @@ function Home() {
                 <Sidepanel/>
             </div>
             <div className="home-main-body right-main-sec">
-                <Header onSearch={handleSearch}/>
+                <Header
+                    onSearch={handleSearch} 
+                    isGroupView={isGroupView} 
+                />
                 <section className='sub-header-h-sec'>
                     <SubHeader
                         isGroupView={isGroupView}
@@ -59,7 +69,7 @@ function Home() {
                 <CreateArea 
                     isGroupView={isGroupView}
                     handleSearch = {handleSearch}
-                    tasks = {tasks}
+                    result={isGroupView ? groups : tasks}
                     isLoading={isLoading}
                 />
                 <Footer/>

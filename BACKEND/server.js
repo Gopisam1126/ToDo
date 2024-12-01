@@ -263,32 +263,59 @@ app.post("/newtask", async (req, res) => {
 app.post("/tasklist/search", async (req, res) => {
     const token = req.headers.authorization?.split(" ")[1];
     const {query} = req.body;
-    console.log("Search Query received : ",query);
 
     try {
         const decoded = jwt.verify(token, SECRET_KEY);
         const username = decoded.username;
-        console.log("Username : ",username);
 
         const searchQ = `
-            SELECT * FROM ${username}
+            SELECT task_head FROM ${username}
             WHERE LOWER(task_head) LIKE $1
         `;
 
         const values = [`%${query.toLowerCase()}%`];
-        console.log("Values : ",values);
 
         const searchRes = await pg.query(searchQ, values);
-        console.log("Search Results : ",searchRes);
 
         res.status(200).json(searchRes.rows);
 
     } catch (error) {
-        console.log("search error", error);
-        
         res.status(500).json({message: "Server Error😑, Error searching!!!"});
     }
 
+});
+
+app.post("/grouplist/search", async (req, res) => {
+
+    const {query} = req.body;
+    const token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+        res.status(401).json({message: "Authorization Error😑"});
+    }
+
+    try {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const username = decoded.username;
+
+        if (!username) {
+            res.status(401).json({message: "Unauthorized user!!!"});
+        }
+
+        const searchQ = `
+            SELECT group_head FROM ${username}
+            WHERE LOWER(group_head) LIKE $1
+        `;
+
+        const values = [`%${query.toLowerCase()}%`];
+
+        const searchRes = await pg.query(searchQ, values);
+
+        res.status(200).json(searchRes.rows);
+
+    } catch (error) {
+        res.status(500).json({message: "Server Error😑, Error searching!!!"});
+    }
 })
 
 app.delete("/groupdetails/:id", async (req, res) => {

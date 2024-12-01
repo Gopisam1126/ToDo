@@ -3,20 +3,21 @@ import "../compStyles/CreateArea.css";
 import GroupView from "../components/groupView";
 import TaskView from "../components/taskView";
 
-function CreateArea({isGroupView, handleSearch, tasks, isLoading}) {
-    // console.log("CA - handle Search : ", handleSearch);
-    console.log("CA - Tasks : ", tasks);
-    console.log("CA - isLoading : ", isLoading);
+function CreateArea({isGroupView, handleSearch, result, isLoading}) {
     
     return <>
         <div>
             {
                 isGroupView ? 
-                    <GroupView/> 
+                    <GroupView
+                        handleSearch={handleSearch}
+                        groups={result}
+                        isLoading={isLoading}
+                    /> 
                 : 
                     <TaskView
                         handleSearch={handleSearch}
-                        tasks={tasks}
+                        tasks={result}
                         isLoading={isLoading}
                     />
             }
