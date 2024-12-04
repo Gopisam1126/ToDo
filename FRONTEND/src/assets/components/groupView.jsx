@@ -3,12 +3,17 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import GroupEditModal from './grpEditModal';
+import TaskModal from './taskModal';
 import "../compStyles/groupView.css";
 import { useEffect, useState } from 'react';
 import axios from "axios";
 
 function GroupView({ groups: searchGroups, isLoading }) {
     const [defaultGroups, setDefaultGroups] = useState([]);
+    const [isGrpModal, setIsGrpModal] = useState(false);
+    const [isTaskModal, setIsTaskModal] = useState(false);
+
 
     // Fetch all groups on component mount
     useEffect(() => {
@@ -39,6 +44,23 @@ function GroupView({ groups: searchGroups, isLoading }) {
             console.error("Error deleting group:", error);
         }
     }
+
+    function openGrpModal() {
+        setIsGrpModal(true);
+    }
+
+    function closeGrpModal() {
+        setIsGrpModal(false);
+    }
+
+    function openTaskModal() {
+        setIsTaskModal(true)
+    }
+
+    function closeTaskModal() {
+        setIsTaskModal(false);
+    }
+
 
     // Format date
     function formatDate(timestamp) {
@@ -78,10 +100,10 @@ function GroupView({ groups: searchGroups, isLoading }) {
                                 <div className="items-c" key={group.id}>
                                     <div className="item-head-c">
                                         <h2 className="grouo-head">{group.group_head}</h2>
-                                        <div className="edit-icon-c">
+                                        <div className="edit-icon-c" onClick={openGrpModal}>
                                             <EditIcon/>
                                         </div>
-                                        <div className="add-new-grp-icon">
+                                        <div className="add-new-grp-icon" onClick={openTaskModal}>
                                             <AddCircleOutlineIcon />
                                         </div>
                                         <div
@@ -124,6 +146,14 @@ function GroupView({ groups: searchGroups, isLoading }) {
                     <p>No Groups Available</p>
                 )}
             </div>
+            <GroupEditModal
+                isOpen={isGrpModal}
+                onClose={closeGrpModal}
+            />
+            <TaskModal
+                isOpen={isTaskModal}
+                onClose={closeTaskModal}
+            />
         </section>
     );
 }
