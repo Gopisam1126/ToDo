@@ -3,7 +3,7 @@ import pkg from "pg";
 import dotenv from "dotenv";
 import cors from "cors";
 import bcrypt from "bcrypt";
-import jwt, { decode }  from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 const app = express();
 const port = 3000;
@@ -60,9 +60,10 @@ app.get("/groupdetails", async (req, res) => {
     try {
         const decoded = jwt.verify(token, SECRET_KEY);
         const username = decoded.username;
+        const user_id = decoded.user_id
 
         if (username) {
-            const grpResQ = `SELECT id, group_head, group_desc, group_priority, group_timestamp FROM groups`;
+            const grpResQ = `SELECT id, group_head, group_desc, group_priority, group_timestamp FROM groups WHERE user_id = ${user_id}`;
             const grpRes = await pg.query(grpResQ);
     
             if (grpRes.rows.length > 0) {
@@ -101,9 +102,10 @@ app.get("/taskdetails", async (req, res) => {
     try {
         const decoded = jwt.verify(token, SECRET_KEY);
         const username = decoded.username;
+        const user_id = decoded.user_id
 
         if (username) {
-            const taskResQ = `SELECT id, task_head, task_desc, start_date, end_date, priority, status, timestamp FROM tasks`;
+            const taskResQ = `SELECT id, task_head, task_desc, start_date, end_date, priority, status, timestamp FROM tasks WHERE user_id = ${user_id}`;
             const taskRes = await pg.query(taskResQ);
     
             if (taskRes.rows.length > 0) {
@@ -154,27 +156,27 @@ app.post("/register", async (req, res) => {
             console.log("Error Registering user!");
         }
 
-        const createTableQ = `
-            CREATE TABLE ${setusername} (
-                id SERIAL PRIMARY KEY,
-                task_head VARCHAR(500),
-                task_desc TEXT,
-                start_date DATE,
-                end_date DATE,
-                priority VARCHAR(50),
-                status VARCHAR(50),
-                timestamp TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-                group_head VARCHAR(500),
-                group_desc TEXT,
-                group_priority VARCHAR(50),
-                group_timestamp TIMESTAMPTZ DEFAULT NULL
-            )
-        `;
-        const userTableQ = await pg.query(createTableQ);
+        // const createTableQ = `
+        //     CREATE TABLE ${setusername} (
+        //         id SERIAL PRIMARY KEY,
+        //         task_head VARCHAR(500),
+        //         task_desc TEXT,
+        //         start_date DATE,
+        //         end_date DATE,
+        //         priority VARCHAR(50),
+        //         status VARCHAR(50),
+        //         timestamp TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+        //         group_head VARCHAR(500),
+        //         group_desc TEXT,
+        //         group_priority VARCHAR(50),
+        //         group_timestamp TIMESTAMPTZ DEFAULT NULL
+        //     )
+        // `;
+        // const userTableQ = await pg.query(createTableQ);
 
-        if (!userTableQ) {
-            console.log("Error creating user Table!");
-        }
+        // if (!userTableQ) {
+        //     console.log("Error creating user Table!");
+        // }
 
         res.status(201).json({ message: "User registered successfully😎" });
 
@@ -281,11 +283,12 @@ app.post("/tasklist/search", async (req, res) => {
     try {
         const decoded = jwt.verify(token, SECRET_KEY);
         const username = decoded.username;
+        const user_id = decoded.user_id;
 
         if (username) {
             const searchQ = `
                 SELECT task_head FROM tasks
-                WHERE LOWER(task_head) LIKE $1
+                WHERE LOWER(task_head) LIKE $1 AND user_id = ${user_id}
             `;
     
             const values = [`%${query.toLowerCase()}%`];
@@ -316,11 +319,12 @@ app.post("/grouplist/search", async (req, res) => {
     try {
         const decoded = jwt.verify(token, SECRET_KEY);
         const username = decoded.username;
+        const user_id = decoded.user_id;
 
         if (username) {
             const searchQ = `
                 SELECT group_head FROM groups
-                WHERE LOWER(group_head) LIKE $1
+                WHERE LOWER(group_head) LIKE $1 AND user_id = ${user_id}
             `;
     
             const values = [`%${query.toLowerCase()}%`];
@@ -349,11 +353,60 @@ app.delete("/groupdetails/:id", async (req, res) => {
     try {
         const decoded = jwt.verify(token, SECRET_KEY);
         const username = decoded.username;
+        const user_id = decoded.user_id;
 
         if (username) {
             await pg.query('BEGIN');
     
-            await pg.query(`DELETE FROM ${username} WHERE id = $1`, [id]);
+            await pg.query(`DELETE FROM groups WHERE id = $1 AND user_id = ${user_id}`, [id]);
+    
+            // await pg.query(`
+            //     WITH updated_rows AS (
+            //         SELECT id AS old_id, ROW_NUMBER() OVER (ORDER BY id) AS new_id FROM ${username}
+            //     )
+            //     UPDATE ${username}
+            //     SET id = updated_rows.new_id
+            //     FROM updated_rows
+            //     WHERE ${username}.id = updated_rows.old_id
+            // `);
+    
+            // await pg.query(`
+            //     SELECT SETVAL(
+            //         pg_get_serial_sequence('${username}', 'id'),
+            //         (SELECT COALESCE(MAX(id), 1) FROM ${username}) + 1
+            //     );
+            // `);        
+    
+            await pg.query("COMMIT");
+    
+            res.status(200).json({message: "Group deletion Successful😊"});
+        } else {
+            return res.status(401).json({message: "You sneaky Bast*red you are not Authorized🫠"});
+        }
+
+    } catch (error) {
+        await pg.query("ROLLBACK");
+        res.status(500).json({message: "Error Deleting Group🫠"});
+    }
+});
+
+app.delete("/taskdetails/:id", async (req, res) => {
+    const {id} = req.params;
+    const token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+        return res.status(401).json({message: "Error : No token provided"});
+    }
+
+    try {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const username = decoded.username;
+        const user_id = decoded.user_id;
+
+        if (username) {
+            await pg.query('BEGIN');
+    
+            await pg.query(`DELETE FROM tasks WHERE id = $1 AND user_id = ${user_id}`, [id]);
     
             // await pg.query(`
             //     WITH updated_rows AS (
