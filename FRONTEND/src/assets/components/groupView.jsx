@@ -4,7 +4,7 @@ import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBullet
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import GroupEditModal from './grpEditModal';
-import TaskModal from './taskModal';
+import AddTasktoGrp from './addTasktoGrp';
 import "../compStyles/groupView.css";
 import { useEffect, useState } from 'react';
 import axios from "axios";
@@ -12,7 +12,7 @@ import axios from "axios";
 function GroupView({ groups: searchGroups, isLoading }) {
     const [defaultGroups, setDefaultGroups] = useState([]);
     const [isGrpModal, setIsGrpModal] = useState(false);
-    const [isTaskModal, setIsTaskModal] = useState(false);
+    const [isAddtoGrp, setIsAddtoGrp] = useState(false);
 
 
     // Fetch all groups on component mount
@@ -53,12 +53,12 @@ function GroupView({ groups: searchGroups, isLoading }) {
         setIsGrpModal(false);
     }
 
-    function openTaskModal() {
-        setIsTaskModal(true)
+    function openAddtoGrp() {
+        setIsAddtoGrp(true);
     }
 
-    function closeTaskModal() {
-        setIsTaskModal(false);
+    function closeAddtoGrp() {
+        setIsAddtoGrp(false);
     }
 
 
@@ -103,7 +103,7 @@ function GroupView({ groups: searchGroups, isLoading }) {
                                         <div className="edit-icon-c" onClick={openGrpModal}>
                                             <EditIcon/>
                                         </div>
-                                        <div className="add-new-grp-icon" onClick={openTaskModal}>
+                                        <div className="add-new-grp-icon" onClick={openAddtoGrp}>
                                             <AddCircleOutlineIcon />
                                         </div>
                                         <div
@@ -150,9 +150,9 @@ function GroupView({ groups: searchGroups, isLoading }) {
                 isOpen={isGrpModal}
                 onClose={closeGrpModal}
             />
-            <TaskModal
-                isOpen={isTaskModal}
-                onClose={closeTaskModal}
+            <AddTasktoGrp
+                isOpen={isAddtoGrp}
+                onClose={closeAddtoGrp}
             />
         </section>
     );
