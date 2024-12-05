@@ -137,6 +137,39 @@ app.get("/taskdetails", async (req, res) => {
     }
 })
 
+app.get("/check-task-in-group/:taskId", async (req, res) => {
+    const { task_id} = req.params;
+
+    const token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+        res.status(401).json({message: "Authorization Error"});
+    }
+
+    try {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const username = decoded.username;
+        const user_id = decoded.user_id;
+
+        if (!username) {
+            res.status(401).json({message: "Unauthorized user"})
+        }
+
+        const checkQ = `
+            SELECT * FROM tasks WHERE group_id IS NULL AND user_id = $1 AND id = $2;
+        `
+        const checkRes = await pg.query(checkQ, [user_id, task_id]);
+
+        if (checkRes.rows.length === 0) {
+            res.json({exists: true})
+        } else {
+            res.json({exists: false})
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: "Error checking for existing tasks in group!"})
+    }
+})
 
 app.post("/register", async (req, res) => {
     const {firstname, lastname, setusername, setpass} = req.body;
@@ -155,28 +188,6 @@ app.post("/register", async (req, res) => {
         if (!insertQ) {
             console.log("Error Registering user!");
         }
-
-        // const createTableQ = `
-        //     CREATE TABLE ${setusername} (
-        //         id SERIAL PRIMARY KEY,
-        //         task_head VARCHAR(500),
-        //         task_desc TEXT,
-        //         start_date DATE,
-        //         end_date DATE,
-        //         priority VARCHAR(50),
-        //         status VARCHAR(50),
-        //         timestamp TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
-        //         group_head VARCHAR(500),
-        //         group_desc TEXT,
-        //         group_priority VARCHAR(50),
-        //         group_timestamp TIMESTAMPTZ DEFAULT NULL
-        //     )
-        // `;
-        // const userTableQ = await pg.query(createTableQ);
-
-        // if (!userTableQ) {
-        //     console.log("Error creating user Table!");
-        // }
 
         res.status(201).json({ message: "User registered successfully😎" });
 
@@ -288,12 +299,12 @@ app.post("/tasklist/search", async (req, res) => {
         if (username) {
             const searchQ = `
                 SELECT task_head FROM tasks
-                WHERE LOWER(task_head) LIKE $1 AND user_id = ${user_id}
+                WHERE LOWER(task_head) LIKE $1 AND user_id = $2
             `;
     
             const values = [`%${query.toLowerCase()}%`];
     
-            const searchRes = await pg.query(searchQ, values);
+            const searchRes = await pg.query(searchQ, [values, user_id]);
     
             res.status(200).json(searchRes.rows);
         } else {
@@ -324,12 +335,12 @@ app.post("/grouplist/search", async (req, res) => {
         if (username) {
             const searchQ = `
                 SELECT group_head FROM groups
-                WHERE LOWER(group_head) LIKE $1 AND user_id = ${user_id}
+                WHERE LOWER(group_head) LIKE $1 AND user_id = $2
             `;
     
             const values = [`%${query.toLowerCase()}%`];
     
-            const searchRes = await pg.query(searchQ, values);
+            const searchRes = await pg.query(searchQ, [values, user_id]);
     
             res.status(200).json(searchRes.rows);
         } else {
@@ -339,6 +350,42 @@ app.post("/grouplist/search", async (req, res) => {
 
     } catch (error) {
         res.status(500).json({message: "Server Error😑, Error searching!!!"});
+    }
+});
+
+app.post("/add-task-to-group", async (req, res) => {
+    const { group_id, task_id } = req.body;
+    
+    const token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+        res.status(401).json({message: "Authorization Error!, No Token provided!"});
+    }
+
+    try {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const username = decoded.username;
+        const user_id = decoded.user_id;
+
+        if (username) {
+            const insertQ = `
+                UPDATE tasks
+                SET group_id = $1
+                WHERE id = $2
+                AND user_id = $3
+                RETURNING *
+            `;
+
+            const result = await pg.query(insertQ, [group_id, task_id, user_id]);
+
+            if (result.rowCount === 0) {
+                res.status(401).json({message: "Task not Found or Unauthorized"})
+            }
+
+            res.status(200).json({message: "Task assigned to group.", task: result.rows[0]})
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to assign task to group' });
     }
 })
 

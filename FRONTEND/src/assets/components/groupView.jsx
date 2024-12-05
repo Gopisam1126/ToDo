@@ -6,13 +6,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import GroupEditModal from './grpEditModal';
 import AddTasktoGrp from './addTasktoGrp';
 import "../compStyles/groupView.css";
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import axios from "axios";
 
 function GroupView({ groups: searchGroups, isLoading }) {
     const [defaultGroups, setDefaultGroups] = useState([]);
     const [isGrpModal, setIsGrpModal] = useState(false);
     const [isAddtoGrp, setIsAddtoGrp] = useState(false);
+    const [selGroupId, setSelGroupId] = useState(null);
 
 
     // Fetch all groups on component mount
@@ -53,13 +54,18 @@ function GroupView({ groups: searchGroups, isLoading }) {
         setIsGrpModal(false);
     }
 
-    function openAddtoGrp() {
-        setIsAddtoGrp(true);
-    }
 
-    function closeAddtoGrp() {
+    const openAddtoGrp = useCallback((groupId) => {
+        if (selGroupId !== groupId) {
+            setSelGroupId(groupId);
+        }
+        setIsAddtoGrp(true);
+    }, [selGroupId]);
+
+    const closeAddtoGrp = useCallback(() => {
         setIsAddtoGrp(false);
-    }
+        setSelGroupId(null);
+    }, []);
 
 
     // Format date
@@ -103,7 +109,7 @@ function GroupView({ groups: searchGroups, isLoading }) {
                                         <div className="edit-icon-c" onClick={openGrpModal}>
                                             <EditIcon/>
                                         </div>
-                                        <div className="add-new-grp-icon" onClick={openAddtoGrp}>
+                                        <div className="add-new-grp-icon" onClick={() => openAddtoGrp(group.id)}>
                                             <AddCircleOutlineIcon />
                                         </div>
                                         <div
@@ -152,6 +158,7 @@ function GroupView({ groups: searchGroups, isLoading }) {
             />
             <AddTasktoGrp
                 isOpen={isAddtoGrp}
+                groupId={selGroupId}
                 onClose={closeAddtoGrp}
             />
         </section>

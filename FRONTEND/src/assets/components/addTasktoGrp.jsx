@@ -7,33 +7,85 @@ import "../compStyles/taskModal.css";
 import "../compStyles/addTasktoGrp.css"
 import axios from "axios";
 
-function AddTasktoGrp({ isOpen, onClose }) {
+function AddTasktoGrp({ isOpen, onClose, groupId }) {
 
     const [isDropDown, setIsDropDown] = useState(false);
     const [options, setOptions] = useState([]);
     const [isError, setIsError] = useState(false);
     const [message, setMessage] = useState('')
+    const [selTaskId, setSelTaskId] = useState(null)
+    const [selectedTask, setSelectedTask] = useState(null);
 
     const handleOptionClick = () => {
         setIsDropDown(!isDropDown)
     }
 
+    const handleTaskSelection = (task_id) => {
+        const task = options.find(option => option.id === task_id);
+        setSelTaskId(task_id);
+        setIsDropDown(false)
+        setSelectedTask(task);
+    }
+
+    async function handleSubmit() {
+
+        if (!selTaskId || !groupId) {
+            setIsError(true);
+            setMessage("Please select a Task or a Valid Group");
+            return
+        }
+
+        try {
+            const token = localStorage.getItem('token');
+
+            // const checkRes = await axios.get(`http://localhost:3000/check-task-in-group/${selTaskId}`, {
+            //     headers: { Authorization: `Bearer ${token}` }
+            // });
+
+            // if (checkRes.data.exists) {
+            //     setIsError(true);
+            //     setMessage("Task Already added");
+            //     return;
+            // }
+
+            await axios.post("http://localhost:3000/add-task-to-group",
+                {group_id: groupId, task_id: selTaskId},
+                {headers: {Authorization: `Bearer ${token}`}}
+            );
+            setMessage("Task assigned to group😎");
+            setIsError(false);
+        } catch (error) {
+            setIsError(true);
+            setMessage("Error adding task to group!")
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
+        let mounted = true;
         async function getTasks() {
             try {
                 const token = localStorage.getItem('token');
+
                 const taskRes = await axios.get("http://localhost:3000/taskdetails", {
                     headers: { Authorization: `Bearer ${token}` },
                 });
-                setOptions(taskRes.data.filter(task => task.task_head !== null));
+                if (mounted) {
+                    setOptions(taskRes.data.filter(task => task.task_head !== null));
+                }
             } catch (error) {
-                setIsError(true);
-                setMessage("Error Fetching Tasks!");
-                setOptions([]);
+                if (mounted) {
+                    setIsError(true);
+                    setMessage("Error Fetching Tasks!");
+                    setOptions([]);
+                }
             }
         }
         getTasks();
+        return () => { mounted = false };
     }, []);
+    
+
 
     if (!isOpen) return null;
 
@@ -78,6 +130,7 @@ function AddTasktoGrp({ isOpen, onClose }) {
                                                 <li
                                                     key={option.id}
                                                     className="dropdown-item"
+                                                    onClick={() => handleTaskSelection(option.id)}
                                                 >
                                                     {option.task_head}
                                                 </li>
@@ -97,7 +150,7 @@ function AddTasktoGrp({ isOpen, onClose }) {
                         <button type="button" onClick={onClose}>
                             Cancel
                         </button>
-                        <button type="submit">Add Task</button>
+                        <button type="button" onClick={handleSubmit}>Add Task</button>
                     </div>
                 </div>
             </div>

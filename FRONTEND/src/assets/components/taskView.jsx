@@ -30,7 +30,7 @@ function TaskView({ tasks: searchTasks, isLoading }) {
     async function handleDelete(taskId) {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:3000/groupdetails/${taskId}`, {
+            await axios.delete(`http://localhost:3000/taskdetails/${taskId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 }
