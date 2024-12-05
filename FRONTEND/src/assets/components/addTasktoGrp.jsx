@@ -39,7 +39,7 @@ function AddTasktoGrp({ isOpen, onClose }) {
 
     return (
         <div className="modal-overlay">
-            <div className="modal-container">
+            <div className="atg-modal-c">
                 <h2>Add Task to Group</h2>
                 <div className="custom-dropdown">
                     <div
@@ -66,6 +66,9 @@ function AddTasktoGrp({ isOpen, onClose }) {
                                 }
                             </div>
                         </div>
+                        <div className="note-to-user">
+                            Select a Task from the list to add to the Group.
+                        </div>
                         <div className="d-list">
                             {
                                 isDropDown && (
@@ -90,7 +93,7 @@ function AddTasktoGrp({ isOpen, onClose }) {
                     <p className="message" style={{color: isError ? "orange" : "green"}}>
                         {message}
                     </p>
-                    <div className="modal-actions">
+                    <div className="atg-modal-actions">
                         <button type="button" onClick={onClose}>
                             Cancel
                         </button>
