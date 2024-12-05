@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
@@ -28,8 +27,9 @@ function AddTasktoGrp({ isOpen, onClose }) {
                 });
                 setOptions(taskRes.data.filter(task => task.task_head !== null));
             } catch (error) {
-                console.log(error);
-                return [];
+                setIsError(true);
+                setMessage("Error Fetching Tasks!");
+                setOptions([]);
             }
         }
         getTasks();
@@ -43,7 +43,7 @@ function AddTasktoGrp({ isOpen, onClose }) {
                 <h2>Add Task to Group</h2>
                 <div className="custom-dropdown">
                     <div
-                        className={`dropdown-header ${isDropDown ? 'open' : 'close'}`}
+                        className={`dropdown-header ${isDropDown ? 'open' : ''}`}
                         onClick={handleOptionClick}
                     >
                         <div className="drp-dwn-label">
@@ -74,7 +74,6 @@ function AddTasktoGrp({ isOpen, onClose }) {
                                             options.map((option) => (
                                                 <li
                                                     key={option.id}
-                                                    onClick={() => handleFormatOption(option.task_head)}
                                                     className="dropdown-item"
                                                 >
                                                     {option.task_head}
@@ -87,14 +86,16 @@ function AddTasktoGrp({ isOpen, onClose }) {
                         </div>
                     </div>
                 </div>
-                <p className="message" style={{color: isError ? "orange" : "green"}}>
-                    {message}
-                </p>
-                <div className="modal-actions">
-                    <button type="button" onClick={onClose}>
-                        Cancel
-                    </button>
-                    <button type="submit">Add Task</button>
+                <div className="modal-bottom-sec">
+                    <p className="message" style={{color: isError ? "orange" : "green"}}>
+                        {message}
+                    </p>
+                    <div className="modal-actions">
+                        <button type="button" onClick={onClose}>
+                            Cancel
+                        </button>
+                        <button type="submit">Add Task</button>
+                    </div>
                 </div>
             </div>
         </div>
