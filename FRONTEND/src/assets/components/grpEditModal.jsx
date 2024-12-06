@@ -42,7 +42,7 @@ function GroupEditModal({ isOpen, onClose, group }) {
         });
 
         try {
-            const modalRes = await axios.post("http://localhost:3000/editgroup", modalData, {
+            const modalRes = await axios.post(`http://localhost:3000/editgroup/${group.id}`, modalData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": 'application/json'

@@ -264,8 +264,6 @@ app.post("/newgroup", async (req, res) => {
         const decoded = jwt.verify(token, SECRET_KEY);
         const username = decoded.username;
         const user_id = decoded.user_id;
-        console.log(user_id);
-        
 
         if (!username || !user_id) {
             return res.status(401).json({ error: "Unauthorized access" });
@@ -281,6 +279,45 @@ app.post("/newgroup", async (req, res) => {
     } catch (error) {
         console.error("Error adding group:", error);
         res.status(500).json({ message: "Unable to add group, please try again! 😑" });
+    }
+});
+
+app.post("/editgroup/:id", async (req, res) => {
+    const {id} = req.params;
+    console.log("id recieved : ", id);
+    
+    const { group_head, group_desc, group_priority } = req.body;
+    const token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+        return res.status(401).json({ error: "No token provided" });
+    }
+
+    try {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const username = decoded.username;
+        const user_id = decoded.user_id;
+
+        if (!username || !user_id) {
+            return res.status(401).json({ error: "Unauthorized access" });
+        }
+
+        const updateGroupQ = `
+            UPDATE groups
+            SET 
+                group_head = $1,
+                group_desc = $2,
+                group_priority = $3
+            WHERE
+                id = $4 AND user_id = $5
+            RETURNING *;
+        `;
+        await pg.query(updateGroupQ, [group_head, group_desc, group_priority, id, user_id]);
+
+        res.status(201).json({ message: "Group edited successfully! 😎" });
+    } catch (error) {
+        console.error("Error Editing group:", error);
+        res.status(500).json({ message: "Unable to Edit group, please try again! 😑" });
     }
 });
 
