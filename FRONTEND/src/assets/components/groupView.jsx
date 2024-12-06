@@ -14,7 +14,7 @@ function GroupView({ groups: searchGroups, isLoading }) {
     const [isGrpModal, setIsGrpModal] = useState(false);
     const [isAddtoGrp, setIsAddtoGrp] = useState(false);
     const [selGroupId, setSelGroupId] = useState(null);
-
+    const [group, setGroup] = useState([]);
 
     // Fetch all groups on component mount
     useEffect(() => {
@@ -46,8 +46,25 @@ function GroupView({ groups: searchGroups, isLoading }) {
         }
     }
 
-    function openGrpModal() {
+    async function getGroupsById(groupId) {
+        try {
+            const token = localStorage.getItem('token');
+            const getGrp = await axios.get(`http://localhost:3000/get-group/${groupId}`, 
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    }
+                }
+            );
+            setGroup(getGrp.data);
+        } catch (error) {
+            console.log("Error fetching group.",error);
+        }
+    }
+
+    const handleEditAction = (groupId) => {
         setIsGrpModal(true);
+        getGroupsById(groupId)
     }
 
     function closeGrpModal() {
@@ -106,7 +123,7 @@ function GroupView({ groups: searchGroups, isLoading }) {
                                 <div className="items-c" key={group.id}>
                                     <div className="item-head-c">
                                         <h2 className="grouo-head">{group.group_head}</h2>
-                                        <div className="edit-icon-c" onClick={openGrpModal}>
+                                        <div className="edit-icon-c" onClick={() => handleEditAction(group.id)}>
                                             <EditIcon/>
                                         </div>
                                         <div className="add-new-grp-icon" onClick={() => openAddtoGrp(group.id)}>
@@ -155,6 +172,7 @@ function GroupView({ groups: searchGroups, isLoading }) {
             <GroupEditModal
                 isOpen={isGrpModal}
                 onClose={closeGrpModal}
+                group={group}
             />
             <AddTasktoGrp
                 isOpen={isAddtoGrp}

@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import "../compStyles/groupModal.css";
 import axios from "axios";
 
-function GroupEditModal({ isOpen, onClose }) {
+function GroupEditModal({ isOpen, onClose, group }) {
+    
     const [formData, setFormData] = useState({
         group_head: "",
         group_desc: "",
@@ -21,19 +22,6 @@ function GroupEditModal({ isOpen, onClose }) {
             setMessage("");
             setIsError(false);
         }
-
-        // async function getCurrentGrpDet() {
-        //     try {
-        //         const token = localStorage.getItem(token);
-        //         const grpRes = await axios.get("http://localhost:3000/groupdetails", {
-        //             headers: { Authorization: `Bearer ${token}` },
-        //         });
-        //         setCurrentGrp(grpRes.data)
-        //     } catch (error) {
-        //         console.log("Error Fetching Group",error);
-        //     }
-        // }
-        // getCurrentGrpDet();
     }, [isOpen]);
 
     const handleChange = (e) => {
@@ -84,7 +72,7 @@ function GroupEditModal({ isOpen, onClose }) {
                             name="group_head"
                             value={formData.group_head}
                             onChange={handleChange}
-                            placeholder="Enter group name"
+                            placeholder={group.group_head}
                             required
                             autoComplete="off"
                         />
@@ -95,7 +83,7 @@ function GroupEditModal({ isOpen, onClose }) {
                             name="group_desc"
                             value={formData.group_desc}
                             onChange={handleChange}
-                            placeholder="Enter group description"
+                            placeholder={group.group_desc}
                             required
                         />
                     </label>
@@ -106,7 +94,7 @@ function GroupEditModal({ isOpen, onClose }) {
                             name="group_priority"
                             value={formData.group_priority}
                             onChange={handleChange}
-                            placeholder="Enter priority (e.g., High, Medium, Low)"
+                            placeholder={group.group_priority}
                             required
                             autoComplete="off"
                         />

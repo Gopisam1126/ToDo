@@ -92,6 +92,34 @@ app.get("/groupdetails", async (req, res) => {
     }
 });
 
+app.get("/get-group/:id", async (req, res) => {
+
+    const {id: groupId} = req.params;
+    const token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+        res.status(401).json({message: "Authorization Error, No Token provided"});
+        return
+    }
+
+    try {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const username = decoded.username;
+        const user_id = decoded.user_id
+
+        if (!username) {
+            res.status(401).json({message: "Unauthorized user!!!"});
+        }
+
+        const getGroupQ = `SELECT * FROM groups WHERE id = $1 AND user_id = $2`;
+        const getGroupRes = await pg.query(getGroupQ, [groupId, user_id]);
+        res.status(200).json(getGroupRes.rows[0]);
+    } catch (error) {
+        console.log("Error fetching group", error);
+        
+    }
+});
+
 app.get("/taskdetails", async (req, res) => {
     const token = req.headers.authorization?.split(" ")[1];
 
