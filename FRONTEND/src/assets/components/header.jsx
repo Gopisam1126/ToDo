@@ -11,17 +11,17 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import LogoutIcon from '@mui/icons-material/Logout';
 import "../compStyles/header.css"
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 function Header({onSearch}) {
+
+    const navigate = useNavigate();
 
     const [currentDate, setCurrentDate] = useState(new Date());
     const [isExpAcc, setIsExpAcc] = useState(false);
     const [username, setUsername] = useState("");
     const dropdownRef = useRef(null);
     const [term, setTerm] = useState('');
-    // console.log("Header c - onSearch", onSearch);
-    
-    
 
     function handleChange(e) {
         setTerm(e.target.value);
@@ -48,7 +48,27 @@ function Header({onSearch}) {
             setIsExpAcc(!isExpAcc);
         }
     };
-    
+
+    const handleLogout = async () => {
+        try {
+            const response = await fetch("http://localhost:3000/logout", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (response.ok) {
+                localStorage.removeItem("token");
+                navigate("/");
+            } else {
+                const data = await response.json();
+                console.error("Logout error:", data.message);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
 
     useEffect(() => {
         async function getUsername() {
@@ -126,7 +146,7 @@ function Header({onSearch}) {
                     Your Tasks
                 </p>
             </div>
-            <div className="acc-exp-items">
+            <div className="acc-exp-items" onClick={handleLogout}>
                 <LogoutIcon/>
                 <p className="acc-exp-i-txt">
                     Log out

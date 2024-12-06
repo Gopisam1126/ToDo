@@ -252,6 +252,16 @@ app.post("/login", async (req, res) => {
     }
 });
 
+app.post("/logout", (req, res) => {
+    try {
+        res.status(200).json({ message: "Logout successful! 😎" });
+    } catch (error) {
+        console.error("Error during logout:", error);
+        res.status(500).json({ message: "Error Logging out 😑. Please try again." });
+    }
+});
+
+
 app.post("/newgroup", async (req, res) => {
     const { group_head, group_desc, group_priority } = req.body;
     const token = req.headers.authorization?.split(" ")[1];
