@@ -325,19 +325,17 @@ app.post("/tasklist/search", jwtTokenMiddleware, async (req, res) => {
 
         if (username) {
             const searchQ = `
-                SELECT task_head FROM tasks
+                SELECT * FROM tasks
                 WHERE LOWER(task_head) LIKE $1 AND user_id = $2
             `;
     
-            const values = [`%${query.toLowerCase()}%`];
-    
-            const searchRes = await pg.query(searchQ, [values, user_id]);
+            const values = [`%${query.toLowerCase()}%`, user_id];
+            const searchRes = await pg.query(searchQ, values);
     
             res.status(200).json(searchRes.rows);
         } else {
             res.status(401).json({message: "Unauthorized user!!!"})
         }
-
 
     } catch (error) {
         res.status(500).json({message: "Server Error😑, Error searching!!!"});
