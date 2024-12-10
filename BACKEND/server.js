@@ -33,16 +33,28 @@ app.use(express.urlencoded({ extended: true }));
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
-app.get("/getuser", async (req, res) => {
+const jwtTokenMiddleware = (req, res, next) => {
     const token = req.headers.authorization?.split(" ")[1];
-    
+
     if (!token) {
         return res.status(401).json({ error: "No token provided" });
     }
 
     try {
         const decoded = jwt.verify(token, SECRET_KEY);
-        const username = decoded.username;
+        req.user = decoded;
+        next();
+    } catch (error) {
+        console.error("Error verifying token:", error);
+        res.status(401).json({ error: "Invalid token" });
+    }
+
+}
+
+app.get("/getuser", jwtTokenMiddleware , async (req, res) => {
+
+    try {
+        const {username} = req.user;
         res.status(200).json({ username });
     } catch (error) {
         console.error("Error verifying token:", error);
@@ -50,18 +62,10 @@ app.get("/getuser", async (req, res) => {
     }
 });
 
-app.get("/groupdetails", async (req, res) => {
-    const token = req.headers.authorization?.split(" ")[1];
-
-    if (!token) {
-        return res.status(401).json({message: "Error Accessing token!!!"})
-    }
+app.get("/groupdetails", jwtTokenMiddleware, async (req, res) => {
 
     try {
-        const decoded = jwt.verify(token, SECRET_KEY);
-        const username = decoded.username;
-        const user_id = decoded.user_id
-
+        const {username, user_id} = req.user;
         if (username) {
             const grpResQ = `SELECT id, group_head, group_desc, group_priority, group_timestamp FROM groups WHERE user_id = ${user_id}`;
             const grpRes = await pg.query(grpResQ);
@@ -92,21 +96,12 @@ app.get("/groupdetails", async (req, res) => {
     }
 });
 
-app.get("/get-group/:id", async (req, res) => {
+app.get("/get-group/:id", jwtTokenMiddleware, async (req, res) => {
 
     const {id: groupId} = req.params;
-    const token = req.headers.authorization?.split(" ")[1];
-
-    if (!token) {
-        res.status(401).json({message: "Authorization Error, No Token provided"});
-        return
-    }
 
     try {
-        const decoded = jwt.verify(token, SECRET_KEY);
-        const username = decoded.username;
-        const user_id = decoded.user_id
-
+        const {username, user_id} = req.user;
         if (!username) {
             res.status(401).json({message: "Unauthorized user!!!"});
         }
@@ -120,17 +115,10 @@ app.get("/get-group/:id", async (req, res) => {
     }
 });
 
-app.get("/taskdetails", async (req, res) => {
-    const token = req.headers.authorization?.split(" ")[1];
-
-    if (!token) {
-        return res.status(401).json({message: "Authentication Error⚠️ - No token provided🙄"})
-    }
+app.get("/taskdetails", jwtTokenMiddleware, async (req, res) => {
 
     try {
-        const decoded = jwt.verify(token, SECRET_KEY);
-        const username = decoded.username;
-        const user_id = decoded.user_id
+        const {username, user_id} = req.user;
 
         if (username) {
             const taskResQ = `SELECT id, task_head, task_desc, start_date, end_date, priority, status, timestamp FROM tasks WHERE user_id = ${user_id}`;
@@ -168,16 +156,8 @@ app.get("/taskdetails", async (req, res) => {
 app.get("/check-task-in-group/:taskId", async (req, res) => {
     const { task_id} = req.params;
 
-    const token = req.headers.authorization?.split(" ")[1];
-
-    if (!token) {
-        res.status(401).json({message: "Authorization Error"});
-    }
-
     try {
-        const decoded = jwt.verify(token, SECRET_KEY);
-        const username = decoded.username;
-        const user_id = decoded.user_id;
+        const {username, user_id} = req.user;
 
         if (!username) {
             res.status(401).json({message: "Unauthorized user"})
@@ -231,8 +211,6 @@ app.post("/login", async (req, res) => {
     try {
         const user = await pg.query("SELECT id, username, password FROM users WHERE username = $1", [username]);
 
-        
-
         if (user.rows.length === 0) {
             return res.status(400).json({error: "Invalid Username!!!🙄"});
         }
@@ -262,18 +240,11 @@ app.post("/logout", (req, res) => {
 });
 
 
-app.post("/newgroup", async (req, res) => {
+app.post("/newgroup", jwtTokenMiddleware, async (req, res) => {
     const { group_head, group_desc, group_priority } = req.body;
-    const token = req.headers.authorization?.split(" ")[1];
-
-    if (!token) {
-        return res.status(401).json({ error: "No token provided" });
-    }
 
     try {
-        const decoded = jwt.verify(token, SECRET_KEY);
-        const username = decoded.username;
-        const user_id = decoded.user_id;
+        const {username, user_id} = req.user;
 
         if (!username || !user_id) {
             return res.status(401).json({ error: "Unauthorized access" });
@@ -292,21 +263,12 @@ app.post("/newgroup", async (req, res) => {
     }
 });
 
-app.post("/editgroup/:id", async (req, res) => {
+app.post("/editgroup/:id", jwtTokenMiddleware, async (req, res) => {
     const {id} = req.params;
-    console.log("id recieved : ", id);
-    
     const { group_head, group_desc, group_priority } = req.body;
-    const token = req.headers.authorization?.split(" ")[1];
-
-    if (!token) {
-        return res.status(401).json({ error: "No token provided" });
-    }
 
     try {
-        const decoded = jwt.verify(token, SECRET_KEY);
-        const username = decoded.username;
-        const user_id = decoded.user_id;
+        const {username, user_id} = req.user;
 
         if (!username || !user_id) {
             return res.status(401).json({ error: "Unauthorized access" });
@@ -331,18 +293,11 @@ app.post("/editgroup/:id", async (req, res) => {
     }
 });
 
-app.post("/newtask", async (req, res) => {
+app.post("/newtask", jwtTokenMiddleware, async (req, res) => {
     const {task_head, task_desc, priority, startdate, enddate, group_id} = req.body;
-    const token = req.headers.authorization?.split(" ")[1];
-
-    if (!token) {
-        return res.status(401).json({message: "Authorization Failed- No token provided⚠️"});
-    }
 
     try {
-        const decoded = jwt.verify(token, SECRET_KEY);
-        const username = decoded.username;
-        const user_id = decoded.user_id;
+        const {username, user_id} = req.user;
 
         if (!username || !user_id) {
             return res.status(401).json({message: "Access Denied - Unauthorized user⚠️"});
@@ -362,14 +317,11 @@ app.post("/newtask", async (req, res) => {
     }
 });
 
-app.post("/tasklist/search", async (req, res) => {
-    const token = req.headers.authorization?.split(" ")[1];
+app.post("/tasklist/search", jwtTokenMiddleware, async (req, res) => {
     const {query} = req.body;
 
     try {
-        const decoded = jwt.verify(token, SECRET_KEY);
-        const username = decoded.username;
-        const user_id = decoded.user_id;
+        const {username, user_id} = req.user;
 
         if (username) {
             const searchQ = `
@@ -393,54 +345,37 @@ app.post("/tasklist/search", async (req, res) => {
 
 });
 
-app.post("/grouplist/search", async (req, res) => {
+app.post("/grouplist/search", jwtTokenMiddleware, async (req, res) => {
 
     const {query} = req.body;
-    const token = req.headers.authorization?.split(" ")[1];
-
-    if (!token) {
-        res.status(401).json({message: "Authorization Error😑"});
-    }
 
     try {
-        const decoded = jwt.verify(token, SECRET_KEY);
-        const username = decoded.username;
-        const user_id = decoded.user_id;
+        const {username, user_id} = req.user;
 
         if (username) {
             const searchQ = `
-                SELECT group_head FROM groups
+                SELECT * FROM groups
                 WHERE LOWER(group_head) LIKE $1 AND user_id = $2
             `;
     
-            const values = [`%${query.toLowerCase()}%`];
-    
-            const searchRes = await pg.query(searchQ, [values, user_id]);
+            const values = [`%${query.toLowerCase()}%`, user_id];
+            const searchRes = await pg.query(searchQ, values);
     
             res.status(200).json(searchRes.rows);
         } else {
             res.status(401).json({message: "Unauthorized user!!!"});
         }
 
-
     } catch (error) {
         res.status(500).json({message: "Server Error😑, Error searching!!!"});
     }
 });
 
-app.post("/add-task-to-group", async (req, res) => {
+app.post("/add-task-to-group", jwtTokenMiddleware, async (req, res) => {
     const { group_id, task_id } = req.body;
-    
-    const token = req.headers.authorization?.split(" ")[1];
-
-    if (!token) {
-        res.status(401).json({message: "Authorization Error!, No Token provided!"});
-    }
 
     try {
-        const decoded = jwt.verify(token, SECRET_KEY);
-        const username = decoded.username;
-        const user_id = decoded.user_id;
+        const {username, user_id} = req.user;
 
         if (username) {
             const insertQ = `
@@ -464,40 +399,16 @@ app.post("/add-task-to-group", async (req, res) => {
     }
 })
 
-app.delete("/groupdetails/:id", async (req, res) => {
+app.delete("/groupdetails/:id", jwtTokenMiddleware, async (req, res) => {
     const {id} = req.params;
-    const token = req.headers.authorization?.split(" ")[1];
-
-    if (!token) {
-        return res.status(401).json({message: "Error : No token provided"});
-    }
 
     try {
-        const decoded = jwt.verify(token, SECRET_KEY);
-        const username = decoded.username;
-        const user_id = decoded.user_id;
+        const {username, user_id} = req.user;
 
         if (username) {
             await pg.query('BEGIN');
     
-            await pg.query(`DELETE FROM groups WHERE id = $1 AND user_id = ${user_id}`, [id]);
-    
-            // await pg.query(`
-            //     WITH updated_rows AS (
-            //         SELECT id AS old_id, ROW_NUMBER() OVER (ORDER BY id) AS new_id FROM ${username}
-            //     )
-            //     UPDATE ${username}
-            //     SET id = updated_rows.new_id
-            //     FROM updated_rows
-            //     WHERE ${username}.id = updated_rows.old_id
-            // `);
-    
-            // await pg.query(`
-            //     SELECT SETVAL(
-            //         pg_get_serial_sequence('${username}', 'id'),
-            //         (SELECT COALESCE(MAX(id), 1) FROM ${username}) + 1
-            //     );
-            // `);        
+            await pg.query(`DELETE FROM groups WHERE id = $1 AND user_id = ${user_id}`, [id]);       
     
             await pg.query("COMMIT");
     
@@ -512,40 +423,16 @@ app.delete("/groupdetails/:id", async (req, res) => {
     }
 });
 
-app.delete("/taskdetails/:id", async (req, res) => {
+app.delete("/taskdetails/:id", jwtTokenMiddleware, async (req, res) => {
     const {id} = req.params;
-    const token = req.headers.authorization?.split(" ")[1];
-
-    if (!token) {
-        return res.status(401).json({message: "Error : No token provided"});
-    }
 
     try {
-        const decoded = jwt.verify(token, SECRET_KEY);
-        const username = decoded.username;
-        const user_id = decoded.user_id;
+        const {username, user_id} = req.user;
 
         if (username) {
             await pg.query('BEGIN');
     
-            await pg.query(`DELETE FROM tasks WHERE id = $1 AND user_id = ${user_id}`, [id]);
-    
-            // await pg.query(`
-            //     WITH updated_rows AS (
-            //         SELECT id AS old_id, ROW_NUMBER() OVER (ORDER BY id) AS new_id FROM ${username}
-            //     )
-            //     UPDATE ${username}
-            //     SET id = updated_rows.new_id
-            //     FROM updated_rows
-            //     WHERE ${username}.id = updated_rows.old_id
-            // `);
-    
-            // await pg.query(`
-            //     SELECT SETVAL(
-            //         pg_get_serial_sequence('${username}', 'id'),
-            //         (SELECT COALESCE(MAX(id), 1) FROM ${username}) + 1
-            //     );
-            // `);        
+            await pg.query(`DELETE FROM tasks WHERE id = $1 AND user_id = ${user_id}`, [id]);       
     
             await pg.query("COMMIT");
     
